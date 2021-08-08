@@ -51,3 +51,31 @@ def product_weights_MLP(model):
                 curr_W = torch.abs(p).t()
                 # Normalizing the current weight using L2-norm
                 curr_W = torch.nn.functional.normalize(curr_W)
+                W = torch.matmul(W, curr_W)
+                # Normalizing the running weight product using L2-norm
+                W = torch.nn.functional.normalize(W)
+    return W
+
+
+def forward_NGM(X, model, S, structure_penalty='hadamard', lambd=0.1):
+    """Pass the input X through the NGM model
+    to obtain the X_pred. 
+
+    LOSS = reg_loss + lambd * structure_loss
+
+    The 'hadamard' ||prodW * Sc|| is more theoretically sound as it just 
+    focuses on the terms needed to zero out and completely drop the 
+    non-zero terms. 
+    The 'diff' ||prodW-S|| also tries to make the non-zero terms go to 1.
+
+    Args:
+        X (torch.Tensor BxD): Input data
+        model (torch.nn.object): The MLP model for NGM's `neural' view
+        S (pd.DataFrame): Adjacency matrix from graph G
+        structure_penalty (str): 'hadamard':||prodW * Sc||, 'diff':||prodW-S||
+        lambd (float): reg_loss + lambd * structure_loss
+            Recommended lambd=1 as the losses are scaled to the same range.
+    
+    Returns:
+        (list): [
+            Xp (torch.Tensor BxD): The predicted X
