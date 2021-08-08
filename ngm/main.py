@@ -79,3 +79,33 @@ def forward_NGM(X, model, S, structure_penalty='hadamard', lambd=0.1):
     Returns:
         (list): [
             Xp (torch.Tensor BxD): The predicted X
+            loss (torch.scalar): The NGM loss 
+            reg_loss (torch.scalar): The regression term loss
+            structure_loss (torch.scalar): The structure penalty loss
+        ]
+    """
+    # 1. Running the NGM model 
+    Xp = model.MLP(X)
+    # 2. Calculate the regression loss
+    mse = nn.MSELoss() 
+    reg_loss = mse(Xp, X)
+    # 3. Calculate the structure loss
+    # 3.1 Get the frame of the graph structure
+    if structure_penalty=='hadamard':
+        # Get the complement of S (binarized)
+        Sg = (S==0).astype(int)
+        Sg = dp.convertToTorch(np.array(Sg), req_grad=False)
+    elif structure_penalty=='diff':
+        # Binarize the adjacency matrix S
+        Sg = (S!=0).astype(int)
+        Sg = dp.convertToTorch(np.array(Sg), req_grad=False)
+    else:
+        print(f'Structure penalty {structure_penalty} is not defined')
+        sys.exit(0)
+    # 3.2 Initialize the structure loss
+    structure_loss = torch.zeros(1)[0]
+    if lambd > 0:
+        # 3.3 Get the product of weights (L2 normalized) of the MLP
+        prod_W = product_weights_MLP(model)
+        D = prod_W.shape[-1]
+        # 3.4 Calculate the penalty
