@@ -190,3 +190,29 @@ def learning(
     # For each fold, collect the best model and the test-loss value
     results_Kfold = {}
     for _k, (train, test) in enumerate(kf.split(X)):
+        if _k >= k_fold: # No CV if k_fold=1
+            continue
+        if VERBOSE: print(f'Fold num {_k}')
+        X_train, X_test = X[train], X[test] # KxD, (M-K)xD
+
+        # Initialize the MLP model
+        if VERBOSE: print(f'Initializing the NGM model')
+        model = neural_view.DNN(I=D, H=hidden_dim, O=D)
+        optimizer = neural_view.get_optimizers(model, lr=lr)
+
+        # TODO: Add base initialization only on the regression loss
+        # model = base_initialization_NGM(model, X_train)
+
+        # Defining optimization & model tracking parameters
+        best_test_loss = np.inf
+        PRINT = int(epochs/10) # will print only 10 times
+        lambd_increase = int(epochs/10)
+        # updating with the best model and loss for the current fold
+        results_Kfold[_k] = {}
+
+        # Training the NGM model
+        for e in range(epochs):
+            # TODO: Keep increasing the lambd penalty as epochs proceed
+            # if not e % lambd_increase:
+            #     lambd *= 10 # increase in lambd value
+            #     print(f'epoch={e}, lambda={lambd}')
