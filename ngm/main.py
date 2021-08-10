@@ -143,3 +143,28 @@ def learning(
        should match the conditional independence structure of the
        input graph. This is achieved using a regularization term.
     3. Return the learned model representing the NGM
+
+    Normalize X and select the best model using K-fold CV. 
+
+    Fit the MLP on the input data X to get the `neural' view of NGM 
+    while maintaining the conditional independence structure defined 
+    by the complement structure matrix Sc. Does cross-validation to 
+    get better generalization.
+
+    Args:
+        G (nx.Graph): Conditional independence graph.
+        X (pd.DataFrame): Samples(M) x Features(D).
+        lambd (float): reg_loss + lambd * structure_loss
+            Recommended lambd=1 as the losses are scaled to the same range.
+        hidden_dim (int): The size of the hidden unit of the MLP. 
+            Each layer will have the same value.
+        epochs (int): The training epochs number.
+        lr (float): Learning rate for the optimizer.
+        norm_type (str): min_max/mean
+        k_fold (int): #splits for the k-fold CV.
+        structure_penalty (str): 'hadamard':||prodW * Sc||, 'diff':||prodW-S||
+        VERBOSE (bool): if True, prints to output.
+        
+    Returns:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
