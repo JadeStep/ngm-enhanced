@@ -168,3 +168,25 @@ def learning(
     Returns:
         model_NGM (list): [
             model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+    """
+    # Get the graph structure
+    S = nx.to_pandas_adjacency(G)
+    # Arrange the columns of X to match the adjacency matrix
+    X = X[S.columns]
+    feature_means = X.mean()
+    print(f'Means of selected features {feature_means, len(feature_means)}')
+    # Normalize the data
+    print(f'Normalizing the data: {norm_type}')
+    X, scaler = dp.process_data_for_CI_graph(X, norm_type)
+    # Converting the data to torch 
+    X = dp.convertToTorch(np.array(X), req_grad=False)
+    M, D = X.shape
+    # Splitting into k-fold for cross-validation 
+    n_splits = k_fold if k_fold > 1 else 2
+    kf = KFold(n_splits=n_splits, shuffle=True)
+    # For each fold, collect the best model and the test-loss value
+    results_Kfold = {}
+    for _k, (train, test) in enumerate(kf.split(X)):
