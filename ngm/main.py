@@ -109,3 +109,37 @@ def forward_NGM(X, model, S, structure_penalty='hadamard', lambd=0.1):
         prod_W = product_weights_MLP(model)
         D = prod_W.shape[-1]
         # 3.4 Calculate the penalty
+        if structure_penalty=='hadamard':
+            # Using the L2 norm for high structure penalty
+            structure_loss = torch.linalg.norm(prod_W*Sg, ord=2)
+        elif structure_penalty=='diff':
+            struct_mse = nn.MSELoss() 
+            structure_loss = struct_mse(prod_W, Sg)
+        # 3.5 Scale the structure loss
+        structure_loss = structure_loss/(D**2)
+        # Adding the log scaling
+        structure_loss = torch.log(structure_loss)
+    # 4. Calculate the total loss = reg_loss + lambd * struct_loss
+    loss = reg_loss + lambd * structure_loss
+ 
+    return Xp, loss, reg_loss, structure_loss
+
+
+def learning(
+    G, 
+    X,
+    lambd=1.0,
+    hidden_dim=20,
+    epochs=1200, 
+    lr=0.001,
+    norm_type='min_max',
+    k_fold=1,
+    structure_penalty='hadamard',
+    VERBOSE=True
+    ):
+    """Learn the distribution over a conditional independence graph. 
+    1. Fit a MLP (autoencoder) to learn the data representation from X->X. 
+    2. The input-output path of dependence structure of the MLP 
+       should match the conditional independence structure of the
+       input graph. This is achieved using a regularization term.
+    3. Return the learned model representing the NGM
