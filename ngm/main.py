@@ -240,3 +240,37 @@ def learning(
             optimizer.step()
             # Printing output
             if not e%PRINT and VERBOSE: 
+                print(f'\nFold {_k}: epoch:{e}/{epochs}')
+                print(f'Train: loss={dp.t2np(loss_train)}, reg={dp.t2np(reg_loss_train)}, struct={dp.t2np(struct_loss_train)}')
+                print(f'Test: loss={dp.t2np(loss_test)}, reg={dp.t2np(reg_loss_test)}, struct={dp.t2np(struct_loss_test)}')
+            # Updating the best model for this fold
+            _loss_test = dp.t2np(loss_test)
+            if _loss_test < best_test_loss: # and e%10==9:
+                results_Kfold[_k]['best_model_updates'] = f'Fold {_k}: epoch:{e}/{epochs}:\n\
+                    Train: loss={dp.t2np(loss_train)}, reg={dp.t2np(reg_loss_train)}, struct={dp.t2np(struct_loss_train)}\n\
+                    Test: loss={dp.t2np(loss_test)}, reg={dp.t2np(reg_loss_test)}, struct={dp.t2np(struct_loss_test)}'
+                # if VERBOSE and not e%PRINT or e==epochs-1:
+                    # print(f'Fold {_k}: epoch:{e}/{epochs}: Updating the best model with test loss={_loss_test}')
+                best_model_kfold = copy.deepcopy(model)
+                best_test_loss = _loss_test
+            # else: # loss increasing, reset the model to the previous best
+            #     # print('re-setting to the previous best model')
+            #     model = best_model_kfold
+            #     optimizer = neural_view.get_optimizers(model, lr=lr)
+        results_Kfold[_k]['test_loss'] = best_test_loss
+        results_Kfold[_k]['model'] = best_model_kfold
+        if VERBOSE: print('\n')
+    # Select the model from the results Kfold dictionary 
+    # with the best score on the test fold.
+    best_loss = np.inf
+    for _k in results_Kfold.keys():
+        curr_loss = results_Kfold[_k]['test_loss']
+        if curr_loss < best_loss:
+            model = results_Kfold[_k]['model']
+            best_loss = curr_loss
+            best_model_details = results_Kfold[_k]["best_model_updates"]
+
+    print(f'Best model selected: {best_model_details}')
+    # Checking the structure of the prodW and Sc
+    prod_W = dp.t2np(product_weights_MLP(model))
+    # print(f'Structure Check: prodW={prod_W}, S={(np.array(S)!=0).astype(int)}')
