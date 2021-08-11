@@ -216,3 +216,27 @@ def learning(
             # if not e % lambd_increase:
             #     lambd *= 10 # increase in lambd value
             #     print(f'epoch={e}, lambda={lambd}')
+            # reset the grads to zero
+            optimizer.zero_grad()
+            # calculate the loss for train data
+            _, loss_train, reg_loss_train, struct_loss_train = forward_NGM(
+                X_train, 
+                model, 
+                S,
+                structure_penalty,
+                lambd=lambd
+            )
+            with torch.no_grad(): # prediction on test 
+                _, loss_test, reg_loss_test, struct_loss_test = forward_NGM(
+                    X_test, 
+                    model, 
+                    S,
+                    structure_penalty, 
+                    lambd=lambd 
+                )
+            # calculate the backward gradients
+            loss_train.backward()
+            # updating the optimizer params with the grads
+            optimizer.step()
+            # Printing output
+            if not e%PRINT and VERBOSE: 
