@@ -399,3 +399,24 @@ def inference(
         # Selecting the output with the lowest inference loss
         curr_reg_loss = dp.t2np(reg_loss)
         if curr_reg_loss < best_reg_loss:
+            best_reg_loss = curr_reg_loss
+            best_Xp = dp.t2np(Xo) # Xi
+        if not itr%PRINT and VERBOSE: 
+            print(f'itr {itr}: reg loss {curr_reg_loss}, Xi={Xi}, Xp={Xp}')
+            Xpred = dp.inverse_norm_table(best_Xp, scaler)
+            print(f'Current best Xpred={Xpred}')
+        itr += 1
+    # inverse normalize the prediction
+    Xpred = dp.inverse_norm_table(best_Xp, scaler)
+    Xpred = pd.DataFrame(Xpred, columns=feature_names)
+    return Xpred
+
+
+######################################################################
+# Functions to analyse the marginal and conditional distributions
+######################################################################
+
+def get_distribution_function(target, source, model, scaler, Xi, x_count=100):
+    """Plot the function target=NGM(source) or Xp=f(Xi).
+    Vary the range of the source and collect the values of the 
+    target variable. We keep the rest of the targets & sources
