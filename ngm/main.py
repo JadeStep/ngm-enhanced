@@ -420,3 +420,33 @@ def get_distribution_function(target, source, model, scaler, Xi, x_count=100):
     """Plot the function target=NGM(source) or Xp=f(Xi).
     Vary the range of the source and collect the values of the 
     target variable. We keep the rest of the targets & sources
+    constant given in Xi (input to the NGM). 
+    
+    Args:
+        target (str/int/float): The feature of interest 
+        source (str/int/float): The feature having a direct connection
+            with the target in the neural view of NGM.
+        model (torch.nn.object):  A MLP model for NGM's `neural' view.
+        scaler (sklearn object): Learned normalizer for the input data.
+        Xi (pd.DataFrame): Initial values of the input to the model.
+            All the values except the source nodes remain constant
+            while varying the input over the range of source feature.
+        x_count (int): The number of points to evaluate f(x) in the range.
+
+    Returns:
+        x_vals (np.array): range of source values
+        fx_vals (np.array): predicted f(source) values for the target
+    """
+    print(f'target={target}, source={source}')
+    # 1. Get the min and max range of the source 
+    source_idx = Xi.columns.get_loc(source)
+    source_min = scaler.data_min_[source_idx]
+    source_max = scaler.data_max_[source_idx]
+    # print(f'Source {source} at index {source_idx}: range ({source_min}, {source_max})')
+    # 2. Create a batch input by varying the source values
+    x_vals = np.linspace(source_min, source_max, x_count)
+    # 2.1 Replicate the Xi entries to have x_count rows
+    column_names = Xi.columns
+    Xi = pd.DataFrame(np.repeat(Xi.values, x_count, axis=0), columns=column_names)
+    # 2.2 Find the source column and assign the range values
+    Xi[source] = x_vals
