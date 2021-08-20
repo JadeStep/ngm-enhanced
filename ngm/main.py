@@ -450,3 +450,42 @@ def get_distribution_function(target, source, model, scaler, Xi, x_count=100):
     Xi = pd.DataFrame(np.repeat(Xi.values, x_count, axis=0), columns=column_names)
     # 2.2 Find the source column and assign the range values
     Xi[source] = x_vals
+    # 3. Normalize the Xi and create a batch tensor
+    Xi = scaler.transform(Xi) # x_count x D
+    Xi = dp.convertToTorch(Xi, req_grad=False)
+    # 4. Run the NGM model 
+    Xp = model.MLP(Xi)
+    # 5. Rescale the output back to the original scale 
+    Xp = dp.inverse_norm_table(dp.t2np(Xp), scaler)
+    Xp = pd.DataFrame(Xp, columns=column_names)
+    # 6. Get the values for the plots
+    fx_vals = np.array(Xp[target])
+    return x_vals, fx_vals
+
+
+def analyse_feature(target_feature, model_NGM, G, Xi=[]):
+    """Analyse the feature of interest with regards to the distributions
+    learned by NGM over the conditional independence graph G.
+
+    Args:
+        target_feature (str/int/float): The feature of interest, should 
+            be present as one of the nodes in graph G
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        G (nx.Graph): Conditional independence graph.
+        Xi (pd.DataFrame): Initial input sample.
+        
+    Returns:
+        None (Plots the dependency functions)
+    """
+    # TODO: Infer the graphs using the prod_W instead?
+    # Get the NGM params
+    model, scaler, feature_means = model_NGM
+    for p in model.parameters(): # Freeze the weights
+        p.requires_grad = False
+    # feature_means = dp.series2df(feature_means)
+    # model_features = feature_means.columns
+    model_features = feature_means.index
