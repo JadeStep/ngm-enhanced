@@ -489,3 +489,34 @@ def analyse_feature(target_feature, model_NGM, G, Xi=[]):
     # feature_means = dp.series2df(feature_means)
     # model_features = feature_means.columns
     model_features = feature_means.index
+    # Preliminary check for the presence of target feature
+    if target_feature not in model_features:
+        print(f'Error: Input feature {target_feature} not in model features')
+        sys.exit(0)
+    # Drop the nodes not in the model from the graph
+    common_features = set(G.nodes()).intersection(model_features)
+    features_dropped = G.nodes() - common_features
+    print(f'Features dropped from graph: {features_dropped}')
+    G = G.subgraph(list(common_features))
+    # 1. Get the neighbors (the dependent vars in CI graph) of the target  
+    # feature from Graph G.
+    target_nbrs = G[target_feature]
+    # 2. Set the initial values of the nodes. 
+    if len(Xi)==0:
+        Xi = dp.series2df(feature_means)
+    # Arrange the columns based on the model_feature names for compatibility
+    Xi = Xi[model_features]
+    # 3. Getting the plots by varying each nbr node and getting the regression 
+    # values for the target node.
+    plot_dict = {target_feature:{}}
+    for nbr in target_nbrs.keys():
+        x, fx = get_distribution_function(target_feature, nbr, model, scaler, Xi)
+        title = f'NGM: {target_feature} (y-axis) vs {nbr} (x-axis)'
+        plot_dict[target_feature][nbr] = [x, fx, title]
+    dp.function_plots_for_target(plot_dict)
+    return None
+
+
+# Getting the marginal distributions
+def marginal_distributions(model_NGM, X):
+    """Get the marginal distribution for all the features learned by NGM.
