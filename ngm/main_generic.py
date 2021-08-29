@@ -34,3 +34,29 @@ import ngm.utils.data_processing as dp
 
 ######################################################################
 # Functions for NGM learning
+######################################################################
+
+def product_weights_MLP(model):
+    """
+    Reads the input model (MLP) and returns the normalized
+    product of the neural network weight matrices. 
+    """
+    # global device
+    for i, (n, p) in enumerate(model.MLP.named_parameters()):
+        if i==0:
+            if 'weight' in n:
+                W = torch.abs(p).t()#.to(device) # DxH
+                # Normalizing the weight using L2-norm
+                W = torch.nn.functional.normalize(W)
+        else: # i > 0
+            if 'weight' in n:
+                curr_W = torch.abs(p).t()
+                # Normalizing the current weight using L2-norm
+                curr_W = torch.nn.functional.normalize(curr_W)
+                W = torch.matmul(W, curr_W)
+                # Normalizing the running weight product using L2-norm
+                W = torch.nn.functional.normalize(W)
+    return W
+
+
+def forward_NGM(X, model, S, structure_penalty='hadamard', lambd=0.1):
