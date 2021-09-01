@@ -86,3 +86,34 @@ def forward_NGM(X, model, S, structure_penalty='hadamard', lambd=0.1):
             structure_loss (torch.scalar): The structure penalty loss
         ]
     """
+    # 1. Running the NGM model 
+    Xp = model.MLP(X)
+    # 2. Calculate the regression loss
+    mse = nn.MSELoss() 
+    reg_loss = mse(Xp, X)
+    # 3. Initialize the structure loss
+    structure_loss = torch.zeros(1)[0]
+    if lambd > 0:
+        # 3.2 Get the product of weights (L2 normalized) of the MLP
+        prod_W = product_weights_MLP(model)
+        # print(f'check prod_w in cuda {prod_W, S}')
+        D = prod_W.shape[-1]
+        # 3.3 Calculate the penalty
+        if structure_penalty=='hadamard':
+            # Using the L2 norm for high structure penalty
+            structure_loss = torch.linalg.norm(prod_W*S, ord=2)
+        elif structure_penalty=='diff':
+            struct_mse = nn.MSELoss() 
+            structure_loss = struct_mse(prod_W, S)
+        # 3.4 Scale the structure loss
+        structure_loss = structure_loss/(D**2)
+        # Adding the log scaling
+        structure_loss = torch.log(structure_loss)
+    # 4. Calculate the total loss = reg_loss + lambd * struct_loss
+    loss = reg_loss + lambd * structure_loss
+    return Xp, loss, reg_loss, structure_loss
+
+
+def learning(
+    G, 
+    X,
