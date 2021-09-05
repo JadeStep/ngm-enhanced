@@ -150,3 +150,35 @@ def learning(
         hidden_dim (int): The size of the hidden unit of the MLP. 
             Each layer will have the same value.
         epochs (int): The training epochs number.
+        lr (float): Learning rate for the optimizer.
+        norm_type (str): min_max/mean
+        k_fold (int): #splits for the k-fold CV.
+        structure_penalty (str): 'hadamard':||prodW * Sc||, 'diff':||prodW-S||
+        VERBOSE (bool): if True, prints to output.
+        BATCH_SIZE (int): If None, take all data
+        
+    Returns:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+    """
+    # Select the device for training
+    # global device
+    device = torch.device("cuda") if USE_CUDA else torch.device("cpu") 
+    print(f'Using "{device}" compute')
+    # Get the graph structure
+    S = nx.to_pandas_adjacency(G)
+
+    # Arrange the columns of X to match the adjacency matrix
+    X = X[S.columns]
+    feature_means = X.mean()
+    print(f'Means of selected features {feature_means, len(feature_means)}')
+    # Normalize the data
+    print(f'Normalizing the data: {norm_type}')
+    # X, scaler = dp.process_data_for_CI_graph(X, norm_type, drop_duplicate=False)
+    X, scaler = dp.normalize_table(X, norm_type)
+    # Converting the data to torch 
+    X = dp.convertToTorch(np.array(X), req_grad=False)
+    # Get the frame of the graph structure and send to device
