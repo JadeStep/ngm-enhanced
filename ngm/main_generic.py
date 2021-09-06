@@ -231,3 +231,40 @@ def learning(
         # For each epoch, go through the entire batch of data
         for e in range(epochs):
             # TODO: Keep increasing the lambd penalty as epochs proceed
+            # if not e % lambd_increase:
+            #     lambd *= 10 # increase in lambd value
+            #     print(f'epoch={e}, lambda={lambd}')
+            if BATCH_SIZE is None:
+                X_train_batch, X_test_batch = X_train, X_test
+            else:
+                # randomly sample train & test points
+                X_train_batch = X_train[np.random.choice(len(X_train), BATCH_SIZE, replace=False)]
+                X_test_batch = X_test[np.random.choice(len(X_test), BATCH_SIZE, replace=False)]
+            
+            # reset the grads to zero
+            optimizer.zero_grad()
+            # calculate the loss for train data
+            _, loss_train, reg_loss_train, struct_loss_train = forward_NGM(
+                X_train_batch, 
+                model, 
+                S,
+                structure_penalty,
+                lambd=lambd
+            )
+            # calculate the backward gradients
+            loss_train.backward()
+            # updating the optimizer params with the grads
+            optimizer.step()
+            # Printing output
+            if not e%PRINT and VERBOSE: 
+                print(f'\nFold {_k}: epoch:{e}/{epochs}')
+                print(f'Train: loss={dp.t2np(loss_train)}, reg={dp.t2np(reg_loss_train)}, struct={dp.t2np(struct_loss_train)}')
+            if e==0 or e%100==99 or (not e%PRINT):# EVERY 100th epoch, save the best model.
+                with torch.no_grad(): # prediction on test 
+                    model.eval()
+                    _, loss_test, reg_loss_test, struct_loss_test = forward_NGM(
+                        X_test_batch, 
+                        model, 
+                        S,
+                        structure_penalty, 
+                        lambd=lambd 
