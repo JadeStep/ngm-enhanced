@@ -210,3 +210,24 @@ def learning(
         X_train, X_test = X[train].to(device), X[test].to(device) # KxD, (M-K)xD
         if VERBOSE: print(f'The data is in {device}, grad should be False: {X_train.requires_grad}')
         # Initialize the MLP model
+        if VERBOSE: print(f'Initializing the NGM model')
+        # Send model to device
+        model = neural_view.DNN(I=D, H=hidden_dim, O=D)
+        model = model.to(device)
+        optimizer = neural_view.get_optimizers(model, lr=lr)
+        if VERBOSE: print(f'NGM model initialized {model}')
+
+        # TODO: Add base initialization only on the regression loss
+        # model = base_initialization_NGM(model, X_train)
+
+        # Defining optimization & model tracking parameters
+        best_test_loss = np.inf
+        PRINT = int(epochs/10) # will print only 10 times
+        lambd_increase = int(epochs/10)
+        # updating with the best model and loss for the current fold
+        results_Kfold[_k] = {}
+
+        # Training the NGM model
+        # For each epoch, go through the entire batch of data
+        for e in range(epochs):
+            # TODO: Keep increasing the lambd penalty as epochs proceed
