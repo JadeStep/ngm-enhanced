@@ -182,3 +182,31 @@ def learning(
     # Converting the data to torch 
     X = dp.convertToTorch(np.array(X), req_grad=False)
     # Get the frame of the graph structure and send to device
+    if structure_penalty=='hadamard':
+        # Get the complement of S (binarized)
+        S = (S==0).astype(int)
+        S = dp.convertToTorch(np.array(S), req_grad=False).to(device)
+    elif structure_penalty=='diff':
+        # Binarize the adjacency matrix S
+        S = (S!=0).astype(int)
+        S = dp.convertToTorch(np.array(S), req_grad=False).to(device)
+    else:
+        print(f'Structure penalty type {structure_penalty} is not defined')
+        sys.exit(0)
+    # print(f'Sending the data to {device}')
+    # X = X.to(device)
+    # print(f'The data is in {device}')
+    M, D = X.shape
+    # Splitting into k-fold for cross-validation 
+    n_splits = k_fold if k_fold > 1 else 2
+    kf = KFold(n_splits=n_splits, shuffle=True)
+    # For each fold, collect the best model and the test-loss value
+    results_Kfold = {}
+    for _k, (train, test) in enumerate(kf.split(X)):
+        if _k >= k_fold: # No CV if k_fold=1
+            continue
+        if VERBOSE: print(f'Fold num {_k}')
+        if VERBOSE: print(f'Sending the data to {device}')
+        X_train, X_test = X[train].to(device), X[test].to(device) # KxD, (M-K)xD
+        if VERBOSE: print(f'The data is in {device}, grad should be False: {X_train.requires_grad}')
+        # Initialize the MLP model
