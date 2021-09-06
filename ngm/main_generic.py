@@ -268,3 +268,22 @@ def learning(
                         S,
                         structure_penalty, 
                         lambd=lambd 
+                    )
+                model.train()
+                if VERBOSE: print(f'Test: loss={dp.t2np(loss_test)}, reg={dp.t2np(reg_loss_test)}, struct={dp.t2np(struct_loss_test)}')
+                # Updating the best model for this fold
+                _loss_test = dp.t2np(loss_test)
+                # if e==0 or (_loss_test < best_test_loss and e%100==99): # EVERY 100th epoch, update the model.
+                if _loss_test < best_test_loss: 
+                    results_Kfold[_k]['best_model_updates'] = f'Fold {_k}: epoch:{e}/{epochs}:\n\
+                        Train: loss={dp.t2np(loss_train)}, reg={dp.t2np(reg_loss_train)}, struct={dp.t2np(struct_loss_train)}\n\
+                        Test: loss={dp.t2np(loss_test)}, reg={dp.t2np(reg_loss_test)}, struct={dp.t2np(struct_loss_test)}'
+                    # if VERBOSE and not e%PRINT or e==epochs-1:
+                        # print(f'Fold {_k}: epoch:{e}/{epochs}: Updating the best model with test loss={_loss_test}')
+                    best_model_kfold = copy.deepcopy(model)
+                    best_test_loss = _loss_test
+                # else: # loss increasing, reset the model to the previous best
+                #     # print('re-setting to the previous best model')
+                #     model = best_model_kfold
+                #     optimizer = neural_view.get_optimizers(model, lr=lr)
+        results_Kfold[_k]['test_loss'] = best_test_loss
