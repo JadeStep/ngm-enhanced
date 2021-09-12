@@ -287,3 +287,38 @@ def learning(
                 #     model = best_model_kfold
                 #     optimizer = neural_view.get_optimizers(model, lr=lr)
         results_Kfold[_k]['test_loss'] = best_test_loss
+        results_Kfold[_k]['model'] = best_model_kfold
+        if VERBOSE: print('\n')
+    # Select the model from the results Kfold dictionary 
+    # with the best score on the test fold.
+    best_loss = np.inf
+    for _k in results_Kfold.keys():
+        curr_loss = results_Kfold[_k]['test_loss']
+        if curr_loss < best_loss:
+            model = results_Kfold[_k]['model']
+            best_loss = curr_loss
+            best_model_details = results_Kfold[_k]["best_model_updates"]
+
+    print(f'Best model selected: {best_model_details}')
+    # Checking the structure of the prodW and Sc
+    prod_W = dp.t2np(product_weights_MLP(model))
+    print(f'Structure Check: prodW={prod_W}, S={S}')
+    # print(f'Structure Check: prodW={prod_W}, S={(np.array(S)!=0).astype(int)}')
+    return [model, scaler, feature_means]
+
+
+
+def learning_batch_mode(
+    G, 
+    X,
+    lambd=1.0,
+    hidden_dim=20,
+    epochs=1200, 
+    lr=0.001,
+    norm_type='min_max',
+    k_fold=1,
+    structure_penalty='hadamard',
+    VERBOSE=True, 
+    BATCH_SIZE=None
+    ):
+    """Go through the entire data in each epoch. Does not work
