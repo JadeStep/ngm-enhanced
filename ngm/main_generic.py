@@ -322,3 +322,25 @@ def learning_batch_mode(
     BATCH_SIZE=None
     ):
     """Go through the entire data in each epoch. Does not work
+    well if the batch size is too low compared to the data size. 
+    
+    Learn the distribution over a conditional independence graph. 
+    1. Fit a MLP (autoencoder) to learn the data representation from X->X. 
+    2. The input-output path of dependence structure of the MLP 
+       should match the conditional independence structure of the
+       input graph. This is achieved using a regularization term.
+    3. Return the learned model representing the NGM
+
+    Normalize X and select the best model using K-fold CV. 
+
+    Fit the MLP on the input data X to get the `neural' view of NGM 
+    while maintaining the conditional independence structure defined 
+    by the complement structure matrix Sc. Does cross-validation to 
+    get better generalization.
+
+    Args:
+        G (nx.Graph): Conditional independence graph.
+        X (pd.DataFrame): Samples(M) x Features(D).
+        lambd (float): reg_loss + lambd * structure_loss
+            Recommended lambd=1 as the losses are scaled to the same range.
+        hidden_dim (int): The size of the hidden unit of the MLP. 
