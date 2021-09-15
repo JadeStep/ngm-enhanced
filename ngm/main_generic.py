@@ -369,3 +369,31 @@ def learning_batch_mode(
     # Normalize the data
     print(f'Normalizing the data: {norm_type}')
     X, scaler = dp.process_data_for_CI_graph(X, norm_type, drop_duplicate=False)
+    # Converting the data to torch 
+    X = dp.convertToTorch(np.array(X), req_grad=False)
+    M, D = X.shape
+    # Splitting into k-fold for cross-validation 
+    n_splits = k_fold if k_fold > 1 else 2
+    kf = KFold(n_splits=n_splits, shuffle=True)
+    # For each fold, collect the best model and the test-loss value
+    results_Kfold = {}
+    for _k, (train, test) in enumerate(kf.split(X)):
+        if _k >= k_fold: # No CV if k_fold=1
+            continue
+        if VERBOSE: print(f'Fold num {_k}')
+        X_train, X_test = X[train], X[test] # KxD, (M-K)xD
+
+        # Initialize the MLP model
+        if VERBOSE: print(f'Initializing the NGM model')
+        model = neural_view.DNN(I=D, H=hidden_dim, O=D)
+        optimizer = neural_view.get_optimizers(model, lr=lr)
+
+        # TODO: Add base initialization only on the regression loss
+        # model = base_initialization_NGM(model, X_train)
+
+        # Defining optimization & model tracking parameters
+        best_test_loss = np.inf
+        PRINT_EPOCHS = int(epochs/10) # will print only 10 times
+        lambd_increase = int(epochs/10)
+        # updating with the best model and loss for the current fold
+        results_Kfold[_k] = {}
