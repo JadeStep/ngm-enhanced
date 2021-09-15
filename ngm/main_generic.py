@@ -397,3 +397,30 @@ def learning_batch_mode(
         lambd_increase = int(epochs/10)
         # updating with the best model and loss for the current fold
         results_Kfold[_k] = {}
+
+        M_tr, _ = X_train.shape
+        num_BATCHES = int(M_tr/BATCH_SIZE)-2
+        PRINT_BATCH = int(num_BATCHES/10) # will print only 10 times
+        # Training the NGM model
+        # For each epoch, go through the entire batch of data
+        for e in range(epochs):
+            for b in range(num_BATCHES):
+                # TODO: Keep increasing the lambd penalty as epochs proceed
+                # if not e % lambd_increase:
+                #     lambd *= 10 # increase in lambd value
+                #     print(f'epoch={e}, lambda={lambd}')
+                if BATCH_SIZE is None:
+                    X_train_batch, X_test_batch = X_train, X_test
+                else:
+                    # X_train_batch = X_train[np.random.choice(len(X_train), BATCH_SIZE, replace=False)]
+                    X_train_batch = X[b*BATCH_SIZE:(b+1)*BATCH_SIZE, :]
+                    # randomly sample test points
+                    X_test_batch = X_test[np.random.choice(len(X_test), BATCH_SIZE, replace=False)]
+                # reset the grads to zero
+                optimizer.zero_grad()
+                # calculate the loss for train data
+                _, loss_train, reg_loss_train, struct_loss_train = forward_NGM(
+                    X_train_batch, 
+                    model, 
+                    S,
+                    structure_penalty,
