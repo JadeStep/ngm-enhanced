@@ -474,3 +474,41 @@ def learning_batch_mode(
     # Checking the structure of the prodW and Sc
     prod_W = dp.t2np(product_weights_MLP(model))
     print(f'Structure Check: prodW={prod_W}, S={(np.array(S)!=0).astype(int)}')
+    return [model, scaler, feature_means]
+
+
+
+######################################################################
+# Functions to run inference over the learned NGM
+######################################################################
+
+
+
+
+def inference_with_CV(
+    model_NGM, 
+    node_feature_dict, 
+    unknown_val='u', 
+    lr=0.001, 
+    max_itr=1000,
+    VERBOSE=True,
+    reg_loss_th=1e-7
+    ):
+    """Algorithm to run the feature inference among the nodes of the
+    NGM learned over the conditional independence graph.
+
+    We only optimize for the regression of the known values as that 
+    is the only ground truth information we have and the prediction
+    should be able to recover the observed datapoints.
+    Regression: Xp = f(Xi) 
+    Input Xi = {Xi[k] (fixed), Xi[u] (learned)}
+    Reg loss for inference = ||Xp[k] - Xi[k]||^2_2
+
+    Run gradient descent over the input, which modifies the unobserved
+    features to minimize the inference regression loss. 
+
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
