@@ -424,3 +424,26 @@ def learning_batch_mode(
                     model, 
                     S,
                     structure_penalty,
+                    lambd=lambd
+                )
+                with torch.no_grad(): # prediction on test 
+                    _, loss_test, reg_loss_test, struct_loss_test = forward_NGM(
+                        X_test_batch, 
+                        model, 
+                        S,
+                        structure_penalty, 
+                        lambd=lambd 
+                    )
+                # calculate the backward gradients
+                loss_train.backward()
+                # updating the optimizer params with the grads
+                optimizer.step()
+                # Printing output
+                if not b%PRINT_BATCH and VERBOSE: 
+                    print(f'\nFold {_k}: epoch:{e}/{epochs}, batch:{b}/{num_BATCHES}')
+                    print(f'Train: loss={dp.t2np(loss_train)}, reg={dp.t2np(reg_loss_train)}, struct={dp.t2np(struct_loss_train)}')
+                    print(f'Test: loss={dp.t2np(loss_test)}, reg={dp.t2np(reg_loss_test)}, struct={dp.t2np(struct_loss_test)}')
+                # Updating the best model for this fold
+                _loss_test = dp.t2np(loss_test)
+                if _loss_test < best_test_loss and b%10==9: # EVERY 10th batch, update the model.
+                    results_Kfold[_k]['best_model_updates'] = f'Fold {_k}: epoch:{e}/{epochs}:\n\
