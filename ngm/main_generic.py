@@ -512,3 +512,28 @@ def inference_with_CV(
             model (torch.nn.object): A MLP model for NGM's `neural' view,
             scaler (sklearn object): Learned normalizer for the input data,
             feature_means (pd.Series): [feature:mean val]
+        ]
+        node_feature_dict (dict): {'name':value}.
+        unknown_val (str): The marker for the unknown value.
+        lr (float): Learning rate for the optimizer.
+        max_itr (int): For the convergence.
+        VERBOSE (bool): enable/disable print statements.
+        reg_loss_th (float): The threshold for reg loss convergence.
+
+    Returns:
+        Xpred (pd.DataFrame): Predictions for the unobserved features.
+            {'feature name': pred-value} 
+    """
+    # Get the NGM params
+    model, scaler, feature_means = model_NGM
+    # Get the feature names and input dimension
+    D = len(feature_means)
+    feature_names = feature_means.index
+    # Freeze the model weights
+    for p in model.parameters():
+        p.requires_grad = False
+    # Initializin the input vector Xi
+    _Xi = feature_means.copy()
+    # TODO: Try min and max init as well
+    # Assign the known (observed) values to the Xi
+    for _n, v in node_feature_dict.items():
