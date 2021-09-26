@@ -560,3 +560,36 @@ def inference_with_CV(
             optimizer_parameters.append(_xi)
     # Init a mask for the known & unknown values
     mask_known = torch.zeros(1, D)
+    mask_unknown = torch.zeros(1, D)
+    for i, _n in enumerate(feature_names):
+        if node_feature_dict[_n]==unknown_val:
+            mask_unknown[0][i] = 1
+        else:
+            mask_known[0][i] = 1
+    # Define the optimizer
+    optimizer = torch.optim.Adam(
+        optimizer_parameters,
+        lr=lr, 
+        betas=(0.9, 0.999),
+        eps=1e-08,
+        # weight_decay=0
+    )
+    # Minimizing for the regression loss for the known values.
+    itr = 0
+    curr_reg_loss = np.inf
+    PRINT = int(max_itr/10) + 1 # will print only 10 times
+    mse = nn.MSELoss() # regression loss
+    # cross-validation loss using all the features
+    mse_valid = nn.MSELoss() # regression loss
+    best_valid_loss = np.inf
+
+    best_reg_loss = np.inf
+    while curr_reg_loss > reg_loss_th and itr<max_itr: # Until convergence
+        # The tensor input to the MLP model
+        Xi = torch.zeros(1, D) 
+        for i, f in enumerate(feature_tensors):
+            Xi[0][i] = f
+        # reset the grads to zero
+        optimizer.zero_grad()
+        # Running the NGM model 
+        Xp = model.MLP(Xi)
