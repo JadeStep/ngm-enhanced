@@ -593,3 +593,30 @@ def inference_with_CV(
         optimizer.zero_grad()
         # Running the NGM model 
         Xp = model.MLP(Xi)
+        # Output should be Xi*known_mask with no grad
+        Xo = Xi.clone().detach()
+        # Set the gradient to False
+        Xo.requires_grad = False
+        # Calculate the Inference loss using the known values
+        reg_loss = mse(mask_known*Xp, mask_known*Xo) + 1e-2 * mse(mask_unknown*Xp, mask_unknown*Xo)
+        # valid_loss = mse_valid(mask_unknown*Xp, mask_unknown*Xo)
+        valid_loss = mse_valid(Xp, Xo)
+        # reg_loss = mse(Xp, Xo)
+        # calculate the backward gradients
+        reg_loss.backward()
+        # updating the optimizer params with the grads
+        optimizer.step()
+        # Selecting the output with the lowest inference loss
+        curr_reg_loss = dp.t2np(reg_loss)
+        curr_valid_loss = dp.t2np(valid_loss)
+        # if curr_reg_loss < best_reg_loss:
+        #     best_reg_loss = curr_reg_loss
+        #     best_Xp = dp.t2np(Xi)
+        if curr_valid_loss < best_valid_loss:
+            best_valid_loss = curr_valid_loss
+            best_Xp = dp.t2np(Xi)
+        if not itr%PRINT and VERBOSE: 
+            # print(f'itr {itr}: reg loss {curr_reg_loss}') #, Xi={Xi}, Xp={Xp}')
+            print(f'itr {itr}: reg loss {curr_valid_loss}') #, Xi={Xi}, Xp={Xp}')
+            Xpred = dp.inverse_norm_table(best_Xp, scaler)
+            # print(f'Current best Xpred={Xpred}')
