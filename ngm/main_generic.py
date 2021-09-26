@@ -620,3 +620,36 @@ def inference_with_CV(
             print(f'itr {itr}: reg loss {curr_valid_loss}') #, Xi={Xi}, Xp={Xp}')
             Xpred = dp.inverse_norm_table(best_Xp, scaler)
             # print(f'Current best Xpred={Xpred}')
+        # print(itr, curr_reg_loss, curr_valid_loss, best_valid_loss)
+        itr += 1
+    # inverse normalize the prediction
+    Xpred = dp.inverse_norm_table(best_Xp, scaler)
+    Xpred = pd.DataFrame(Xpred, columns=feature_names)
+    return Xpred
+
+
+def inference(
+    model_NGM, 
+    node_feature_dict, 
+    unknown_val='u', 
+    lr=0.001, 
+    max_itr=1000,
+    VERBOSE=True,
+    reg_loss_th=1e-7
+    ):
+    """Algorithm to run the feature inference among the nodes of the
+    NGM learned over the conditional independence graph.
+
+    We only optimize for the regression of the known values as that 
+    is the only ground truth information we have and the prediction
+    should be able to recover the observed datapoints.
+    Regression: Xp = f(Xi) 
+    Input Xi = {Xi[k] (fixed), Xi[u] (learned)}
+    Reg loss for inference = ||Xp[k] - Xi[k]||^2_2
+
+    Run gradient descent over the input, which modifies the unobserved
+    features to minimize the inference regression loss. 
+
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
