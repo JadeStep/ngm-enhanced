@@ -537,3 +537,26 @@ def inference_with_CV(
     # TODO: Try min and max init as well
     # Assign the known (observed) values to the Xi
     for _n, v in node_feature_dict.items():
+        if v!=unknown_val:
+            _Xi[_n] = v
+    # Normalize the values of Xi using the scaler
+    _Xi = scaler.transform(dp.series2df(_Xi))[0]
+    # Convert to dataseries to maintain the column name associations
+    _Xi = pd.Series(
+        {n:v for n, v in zip(feature_names, _Xi)}, 
+        index=feature_names
+    )
+    # Creating the feature list with unobserved (unkonwn) tensors as learnable.
+    # and observed (known) tensors as fixed
+    feature_tensors = [] # List of feature tensors
+    # Setting the optimization parameters
+    optimizer_parameters = []
+    for i, _n in enumerate(feature_names):
+        _xi = torch.as_tensor(_Xi[_n])
+        # set the value to learnable or not
+        _xi.requires_grad = node_feature_dict[_n]==unknown_val
+        feature_tensors.append(_xi)
+        if node_feature_dict[_n]==unknown_val:
+            optimizer_parameters.append(_xi)
+    # Init a mask for the known & unknown values
+    mask_known = torch.zeros(1, D)
