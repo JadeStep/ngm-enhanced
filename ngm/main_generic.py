@@ -712,3 +712,33 @@ def inference(
         else:
             mask_known[0][i] = 1
     # Define the optimizer
+    optimizer = torch.optim.Adam(
+        optimizer_parameters,
+        lr=lr, 
+        betas=(0.9, 0.999),
+        eps=1e-08,
+        # weight_decay=0
+    )
+    # Minimizing for the regression loss for the known values.
+    itr = 0
+    curr_reg_loss = np.inf
+    PRINT = int(max_itr/10) + 1 # will print only 10 times
+    mse = nn.MSELoss() # regression loss 
+    best_reg_loss = np.inf
+    while curr_reg_loss > reg_loss_th and itr<max_itr: # Until convergence
+        # The tensor input to the MLP model
+        Xi = torch.zeros(1, D) 
+        for i, f in enumerate(feature_tensors):
+            Xi[0][i] = f
+        # reset the grads to zero
+        optimizer.zero_grad()
+        # Running the NGM model 
+        Xp = model.MLP(Xi)
+        # Output should be Xi*known_mask with no grad
+        Xo = Xi.clone().detach()
+        # Set the gradient to False
+        Xo.requires_grad = False
+        # Calculate the Inference loss using the known values
+        reg_loss = mse(mask_known*Xp, mask_known*Xo)
+        # reg_loss = mse(Xp, Xo)
+        # calculate the backward gradients
