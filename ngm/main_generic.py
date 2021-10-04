@@ -742,3 +742,28 @@ def inference(
         reg_loss = mse(mask_known*Xp, mask_known*Xo)
         # reg_loss = mse(Xp, Xo)
         # calculate the backward gradients
+        reg_loss.backward()
+        # updating the optimizer params with the grads
+        optimizer.step()
+        # Selecting the output with the lowest inference loss
+        curr_reg_loss = dp.t2np(reg_loss)
+        if curr_reg_loss < best_reg_loss:
+            best_reg_loss = curr_reg_loss
+            best_Xp = dp.t2np(Xi)
+        if not itr%PRINT and VERBOSE: 
+            print(f'itr {itr}: reg loss {curr_reg_loss}') #, Xi={Xi}, Xp={Xp}')
+            Xpred = dp.inverse_norm_table(best_Xp, scaler)
+            # print(f'Current best Xpred={Xpred}')
+        itr += 1
+    # inverse normalize the prediction
+    Xpred = dp.inverse_norm_table(best_Xp, scaler)
+    Xpred = pd.DataFrame(Xpred, columns=feature_names)
+    return Xpred
+
+
+
+def fit_regression_direct(
+    model_NGM, 
+    Xy, 
+    target_feature, 
+    VERBOSE=True,
