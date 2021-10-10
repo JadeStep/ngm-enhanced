@@ -819,3 +819,33 @@ def fit_regression_direct(
         # Creating the tensor input to the MLP model
         Xi = Xi_all[b*B:, :] if b==numB-1 else Xi_all[b*B:(b+1)*B, :]
         # Running the NGM model 
+        Xp = model.MLP(Xi)
+        # Collect the predictions
+        Xp_batch.extend(dp.t2np(Xp))
+    # inverse normalize the prediction
+    Xpred = dp.inverse_norm_table(Xp_batch, scaler)
+    Xpred = pd.DataFrame(Xpred, columns=feature_names)
+    return Xpred
+
+
+def fit_regression(
+    model_NGM, 
+    Xy, 
+    target_feature, 
+    lr=0.001, 
+    max_itr=1000,
+    VERBOSE=True,
+    reg_loss_th=1e-7, 
+    BATCH_SIZE=1000,
+    unknown_val='u',
+    USE_CUDA=True
+    ):
+    """Algorithm to run the batch inference among the nodes of the
+    NGM learned over the conditional independence graph.
+
+    We only optimize for the regression of the known values as that 
+    is the only ground truth information we have and the prediction
+    should be able to recover the observed datapoints.
+    Regression: Xp = f(Xi) 
+    Input Xi = {Xi[k] (fixed), Xi[u] (learned)}
+    Reg loss for inference = ||Xp[k] - Xi[k]||^2_2
