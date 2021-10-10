@@ -795,3 +795,27 @@ def fit_regression_direct(
     numB = int(np.ceil(Xy.shape[0]/B))
     # Get the NGM params
     model, scaler, feature_means = model_NGM
+    model = model.to(device)
+    # Get the feature names and input dimension 
+    D = len(feature_means)
+    feature_names = feature_means.index
+    # Arrange the columns of input data to match feature means
+    Xy = Xy[feature_names]
+    # Eval mode
+    model.eval()
+    # Freeze the model weights
+    for p in model.parameters():
+        p.requires_grad = False
+    
+    # initialize the target feature as the mean value (SHOULD NOT MATTER)
+    Xy[target_feature] = feature_means[target_feature]  # BxD
+    # Scale the input and create a tensor
+    Xi_all = dp.convertToTorch(scaler.transform(Xy), req_grad=False).to(device)
+    print(Xi_all.shape) # B_allxD
+    # Minimizing for the regression loss for the known values.
+    Xp_batch = []
+    for b in range(numB):
+        # print(f'Batch {b}/{numB}')
+        # Creating the tensor input to the MLP model
+        Xi = Xi_all[b*B:, :] if b==numB-1 else Xi_all[b*B:(b+1)*B, :]
+        # Running the NGM model 
