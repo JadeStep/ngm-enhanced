@@ -876,3 +876,26 @@ def fit_regression(
     numB = int(np.ceil(Xy.shape[0]/B))
     # Get the NGM params
     model, scaler, feature_means = model_NGM
+    model = model.to(device)
+    # Get the feature names and input dimension 
+    D = len(feature_means)
+    feature_names = feature_means.index
+    # Arrange the columns of input data to match feature means
+    Xy = Xy[feature_names]
+    # Freeze the model weights
+    for p in model.parameters():
+        p.requires_grad = False
+    # initialize the target feature as the mean value
+    Xy[target_feature] = feature_means[target_feature] # BxD
+    # Scale the input data
+    Xy = pd.DataFrame(scaler.transform(Xy), columns=Xy.columns)
+    print(Xy)
+    # Creating the feature list with unobserved (unknown) tensors as learnable.
+    # and observed (known) tensors as fixed
+    feature_tensors, optimizer_parameters = [], [] # List of feature tensors (D list of length B)
+    # Setting the optimization parameters
+    # learnable_tensors = torch.as_tensor(Xy[target_feature])
+    # learnable_tensors.requires_grad = True
+    # optimizer_parameters = [learnable_tensors]
+    # Xy.drop([target_feature], inplace=True)
+    # fixed_tensors = torch.as_tensor(Xy)
