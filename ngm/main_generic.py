@@ -926,3 +926,31 @@ def fit_regression(
     for i, _n in enumerate(feature_names):
         if _n in target_feature:
             print(f'Inside target feature mask {i, _n}')
+            mask_unknown[:, i] = 1
+        else:
+            mask_known[:, i] = 1
+    # Define the optimizer
+    optimizer = torch.optim.Adam(
+        optimizer_parameters,
+        lr=lr, 
+        betas=(0.9, 0.999),
+        eps=1e-08,
+        # weight_decay=0
+    )
+    # Minimizing for the regression loss for the known values.
+    best_Xp_batch = []
+    for b in range(numB):
+        print(f'Batch {b}/{numB}')
+        itr = 0
+        curr_reg_loss = np.inf
+        PRINT = int(max_itr/10) + 1 # will print only 10 times
+        mse = nn.MSELoss() # regression loss 
+        best_reg_loss = np.inf
+        while curr_reg_loss > reg_loss_th and itr<max_itr: # Until convergence
+            # Creating the tensor input to the MLP model
+            # Getting the updated input at every iteration
+            if b==numB-1:
+                _b_size = Xy.shape[0]-b*B
+                Xi = torch.cat([ft[b*B:] for ft in feature_tensors], 1)
+                mask_known = mask_known[:_b_size, :]
+                mask_unknown = mask_unknown[:_b_size, :]
