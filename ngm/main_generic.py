@@ -954,3 +954,33 @@ def fit_regression(
                 Xi = torch.cat([ft[b*B:] for ft in feature_tensors], 1)
                 mask_known = mask_known[:_b_size, :]
                 mask_unknown = mask_unknown[:_b_size, :]
+                # print(f'Check masks {_b_size, Xy.shape[0], B, mask_known, mask_known.shape}')
+            else:
+                Xi = torch.cat([ft[b*B:(b+1)*B] for ft in feature_tensors], 1)
+            # print(f'Check { len(feature_tensors[b*B:(b+1)*B]), Xi.shape, b, B, (b+1)*B}')
+            # reset the grads to zero
+            optimizer.zero_grad()
+            # Running the NGM model 
+            Xp = model.MLP(Xi)
+            # Output should be Xi*known_mask with no grad
+            Xo = Xi.clone().detach()
+            # Set the gradient to False
+            Xo.requires_grad = False
+            # Calculate the Inference loss using the known values
+            reg_loss = mse(mask_known*Xp, mask_known*Xo)
+            # reg_loss = mse(Xp, Xo)
+            # calculate the backward gradients
+            reg_loss.backward()
+            # updating the optimizer params with the grads
+            optimizer.step()
+            # Selecting the output with the lowest inference loss
+            curr_reg_loss = dp.t2np(reg_loss)
+            if curr_reg_loss < best_reg_loss:
+                best_reg_loss = curr_reg_loss
+                best_Xp = dp.t2np(Xi)
+            if not itr%PRINT and VERBOSE: 
+                print(f'itr {itr}: reg loss {curr_reg_loss}') #, Xi={Xi}, Xp={Xp}')
+                # Xpred = dp.inverse_norm_table(best_Xp, scaler)
+                # print(f'Current best Xpred={Xpred}')
+            itr += 1
+        # Collect the predictions
