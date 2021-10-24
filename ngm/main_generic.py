@@ -984,3 +984,27 @@ def fit_regression(
                 # print(f'Current best Xpred={Xpred}')
             itr += 1
         # Collect the predictions
+        best_Xp_batch.extend(best_Xp)
+    # inverse normalize the prediction
+    # print(f'scale back to original {best_Xp}')
+    Xpred = dp.inverse_norm_table(best_Xp_batch, scaler)
+    Xpred = pd.DataFrame(Xpred, columns=feature_names)
+    return Xpred
+
+
+def fit_regression_no_batch(
+    model_NGM, 
+    Xy, 
+    target_feature, 
+    lr=0.001, 
+    max_itr=1000,
+    VERBOSE=True,
+    reg_loss_th=1e-7, 
+    # BATCH_SIZE=1000,
+    unknown_val='u',
+    USE_CUDA=True
+    ):
+    """Algorithm to run the batch inference among the nodes of the
+    NGM learned over the conditional independence graph.
+
+    We only optimize for the regression of the known values as that 
