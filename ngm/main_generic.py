@@ -1110,3 +1110,30 @@ def fit_regression_no_batch(
     while curr_reg_loss > reg_loss_th and itr<max_itr: # Until convergence
         # Creating the tensor input to the MLP model
         # Xi = torch.zeros(B, D) 
+        # for i, f in enumerate(feature_tensors):
+        #     Xi[0][i] = f
+        # print(feature_tensors)
+        # Getting the updated input at every iteration
+        Xi = torch.cat(feature_tensors, 1)
+        # print(f'Check for learnable and fixed tensors {Xi, Xi.shape, feature_tensors[0], feature_tensors[15]}')
+        # reset the grads to zero
+        optimizer.zero_grad()
+        # Running the NGM model 
+        Xp = model.MLP(Xi)
+        # Output should be Xi*known_mask with no grad
+        Xo = Xi.clone().detach()
+        # Set the gradient to False
+        Xo.requires_grad = False
+        # Calculate the Inference loss using the known values
+        reg_loss = mse(mask_known*Xp, mask_known*Xo)
+        # reg_loss = mse(Xp, Xo)
+        # calculate the backward gradients
+        reg_loss.backward()
+        # updating the optimizer params with the grads
+        optimizer.step()
+        # Selecting the output with the lowest inference loss
+        curr_reg_loss = dp.t2np(reg_loss)
+        if curr_reg_loss < best_reg_loss:
+            best_reg_loss = curr_reg_loss
+            best_Xp = dp.t2np(Xi)
+        if not itr%PRINT and VERBOSE: 
