@@ -1061,3 +1061,27 @@ def fit_regression_no_batch(
     # learnable_tensors = torch.as_tensor(Xy[target_feature])
     # learnable_tensors.requires_grad = True
     # optimizer_parameters = [learnable_tensors]
+    # Xy.drop([target_feature], inplace=True)
+    # fixed_tensors = torch.as_tensor(Xy)
+    # fixed_tensors.requires_grad = False
+    # feature_tensors =  
+
+    for i, _n in enumerate(feature_names):
+        _xi = torch.as_tensor(Xy[_n]).float().reshape(-1, 1).to(device) # Bx1
+        # print(_xi.shape)
+        # brr
+        # set the value to learnable or not
+        _xi.requires_grad = _n in target_feature
+        # _xi = _xi.to(device)
+        feature_tensors.append(_xi)
+        if _n in target_feature: 
+            print(f'Learnable feature {i, _n}')
+            optimizer_parameters.append(_xi)
+    # for i, ft in enumerate(feature_tensors):
+    #     print(ft.requires_grad)
+    # print(feature_tensors[i][:10], feature_tensors[0][:10])
+    Xi = torch.cat(feature_tensors, 1)
+    print(f'Input learnable tensor created {Xi, Xi.shape}')
+    # Check the gradients
+
+    # Init a mask for the known & unknown values
