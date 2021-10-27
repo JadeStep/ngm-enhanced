@@ -1137,3 +1137,37 @@ def fit_regression_no_batch(
             best_reg_loss = curr_reg_loss
             best_Xp = dp.t2np(Xi)
         if not itr%PRINT and VERBOSE: 
+            print(f'itr {itr}: reg loss {curr_reg_loss}') #, Xi={Xi}, Xp={Xp}')
+            Xpred = dp.inverse_norm_table(best_Xp, scaler)
+            # print(f'Current best Xpred={Xpred}')
+        itr += 1
+    # inverse normalize the prediction
+    # print(f'scale back to original {best_Xp}')
+    Xpred = dp.inverse_norm_table(best_Xp, scaler)
+    Xpred = pd.DataFrame(Xpred, columns=feature_names)
+    return Xpred
+
+
+######################################################################
+# Functions to analyse the marginal and conditional distributions
+######################################################################
+
+def get_distribution_function(target, source, model, scaler, Xi, x_count=100):
+    """Plot the function target=NGM(source) or Xp=f(Xi).
+    Vary the range of the source and collect the values of the 
+    target variable. We keep the rest of the targets & sources
+    constant given in Xi (input to the NGM). 
+    
+    Args:
+        target (str/int/float): The feature of interest 
+        source (str/int/float): The feature having a direct connection
+            with the target in the neural view of NGM.
+        model (torch.nn.object):  A MLP model for NGM's `neural' view.
+        scaler (sklearn object): Learned normalizer for the input data.
+        Xi (pd.DataFrame): Initial values of the input to the model.
+            All the values except the source nodes remain constant
+            while varying the input over the range of source feature.
+        x_count (int): The number of points to evaluate f(x) in the range.
+
+    Returns:
+        x_vals (np.array): range of source values
