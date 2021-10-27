@@ -1209,3 +1209,38 @@ def analyse_feature(target_feature, model_NGM, G, Xi=[]):
         model_NGM (list): [
             model (torch.nn.object): A MLP model for NGM's `neural' view,
             scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        G (nx.Graph): Conditional independence graph.
+        Xi (pd.DataFrame): Initial input sample.
+        
+    Returns:
+        None (Plots the dependency functions)
+    """
+    # TODO: Infer the graphs using the prod_W instead?
+    # Get the NGM params
+    model, scaler, feature_means = model_NGM
+    for p in model.parameters(): # Freeze the weights
+        p.requires_grad = False
+    # feature_means = dp.series2df(feature_means)
+    # model_features = feature_means.columns
+    model_features = feature_means.index
+    # Preliminary check for the presence of target feature
+    if target_feature not in model_features:
+        print(f'Error: Input feature {target_feature} not in model features')
+        sys.exit(0)
+    # Drop the nodes not in the model from the graph
+    common_features = set(G.nodes()).intersection(model_features)
+    features_dropped = G.nodes() - common_features
+    print(f'Features dropped from graph: {features_dropped}')
+    G = G.subgraph(list(common_features))
+    # 1. Get the neighbors (the dependent vars in CI graph) of the target  
+    # feature from Graph G.
+    target_nbrs = G[target_feature]
+    # 2. Set the initial values of the nodes. 
+    if len(Xi)==0:
+        Xi = dp.series2df(feature_means)
+    # Arrange the columns based on the model_feature names for compatibility
+    Xi = Xi[model_features]
+    # 3. Getting the plots by varying each nbr node and getting the regression 
+    # values for the target node.
