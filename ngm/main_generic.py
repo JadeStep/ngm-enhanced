@@ -1244,3 +1244,33 @@ def analyse_feature(target_feature, model_NGM, G, Xi=[]):
     Xi = Xi[model_features]
     # 3. Getting the plots by varying each nbr node and getting the regression 
     # values for the target node.
+    plot_dict = {target_feature:{}}
+    for nbr in target_nbrs.keys():
+        x, fx = get_distribution_function(target_feature, nbr, model, scaler, Xi)
+        title = f'NGM: {target_feature} (y-axis) vs {nbr} (x-axis)'
+        plot_dict[target_feature][nbr] = [x, fx, title]
+    dp.function_plots_for_target(plot_dict)
+    return None
+
+
+# Getting the marginal distributions
+def marginal_distributions(model_NGM, X):
+    """Get the marginal distribution for all the features learned by NGM.
+
+    1. Uses the probability sum law to calculate the marginals
+       P(A) = \sum_{n} P(A|B)
+    2. Use the histogram binning over the input data X (frequentist way)
+
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        X (pd.DataFrame): Provided input samples.
+
+    Returns:
+        hist: Histogram (or function)
+    """
+    hist = X.hist(bins=100, figsize=(15, 15))
+    return hist
