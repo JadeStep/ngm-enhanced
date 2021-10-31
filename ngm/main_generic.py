@@ -1274,3 +1274,35 @@ def marginal_distributions(model_NGM, X):
     """
     hist = X.hist(bins=100, figsize=(15, 15))
     return hist
+
+
+######################################################################
+# Functions to sample from the learned NGM
+######################################################################
+
+def inference_batch(
+    model_NGM, 
+    Xy, 
+    target_feature, 
+    lr=0.001, 
+    max_itr=1000,
+    VERBOSE=True,
+    reg_loss_th=1e-3, 
+    BATCH_SIZE=1000,
+    USE_CUDA=True
+    ):
+    """Algorithm to run the batch inference among the nodes of the
+    NGM learned over the conditional independence graph.
+
+    The target feature for a categorical variable is set to unknown 
+    for all the categories. c_0, c_1, ..., c_|C|
+
+    We only optimize for the regression of the known values as that 
+    is the only ground truth information we have and the prediction
+    should be able to recover the observed datapoints.
+    Regression: Xp = f(Xi) 
+    Input Xi = {Xi[k] (fixed), Xi[u] (learned)}
+    Reg loss for inference = ||Xp[k] - Xi[k]||^2_2
+
+    Run gradient descent over the input, which modifies the unobserved
+    features to minimize the inference regression loss. 
