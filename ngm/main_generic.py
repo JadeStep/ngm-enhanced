@@ -1306,3 +1306,24 @@ def inference_batch(
 
     Run gradient descent over the input, which modifies the unobserved
     features to minimize the inference regression loss. 
+
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        node_feature_dict (dict): {'name':value}.
+        unknown_val (str): The marker for the unknown value.
+        lr (float): Learning rate for the optimizer.
+        max_itr (int): For the convergence.
+        VERBOSE (bool): enable/disable print statements.
+        reg_loss_th (float): The threshold for reg loss convergence.
+
+    Returns:
+        Xpred (pd.DataFrame): Predictions for the unobserved features.
+            {'feature name': pred-value} 
+    """
+    device = torch.device("cuda") if USE_CUDA else torch.device("cpu") 
+    print(f'Using "{device}" compute')
+    B = min(BATCH_SIZE, Xy.shape[0])
