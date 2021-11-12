@@ -1408,3 +1408,34 @@ def inference_batch(
             optimizer.step()
             # Selecting the output with the lowest inference loss
             curr_reg_loss = dp.t2np(reg_loss)
+            if curr_reg_loss < best_reg_loss:
+                best_reg_loss = curr_reg_loss
+                best_Xp = dp.t2np(Xo) #Xi
+            if not itr%PRINT and VERBOSE: 
+                print(f'itr {itr}: reg loss {curr_reg_loss}') #, Xi={Xi}, Xp={Xp}')
+
+            itr += 1
+        # Collect the predictions
+        best_Xp_batch.extend(best_Xp)
+    # inverse normalize the prediction
+    Xpred = dp.inverse_norm_table(best_Xp_batch, scaler)
+    Xpred = pd.DataFrame(Xpred, columns=feature_names)
+    # Set the known feature columns from the input
+    known_features = [f for f in feature_names if f not in target_feature]
+    Xpred[known_features] = Xy[known_features]
+    return Xpred
+
+def original_from_onehot(Xs, dtype, ohe):
+    numerical_features = [f for f in dtype.keys() if dtype[f]=='r']
+    original_categories = [f for f in dtype.keys() if dtype[f]=='c']
+    categorical_features = list(ohe.get_feature_names_out())
+    # Collect all the numerical values
+    category_values = ohe.categories_
+    # Matching whether the original categories are correct
+    # by checking the order 
+    categorical_features_2 = []
+    for co, cv in zip(original_categories, category_values):
+        for v in cv:
+            categorical_features_2.append(str(co)+'_'+str(v))
+    #if condition returns False, AssertionError is raised:
+    assert categorical_features==categorical_features_2, 'Check categorical features ohe order'
