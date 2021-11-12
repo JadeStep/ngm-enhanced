@@ -1439,3 +1439,33 @@ def original_from_onehot(Xs, dtype, ohe):
             categorical_features_2.append(str(co)+'_'+str(v))
     #if condition returns False, AssertionError is raised:
     assert categorical_features==categorical_features_2, 'Check categorical features ohe order'
+    df_ohe_inverse = pd.DataFrame(ohe.inverse_transform(Xs[categorical_features]), columns=original_categories)
+    dfs = pd.concat([Xs[numerical_features], df_ohe_inverse], axis=1)
+    # Do inverse transform for the categorical features
+    return dfs
+    
+
+def get_sample_batch(model_NGM, Ds, num_samples, dtype, ohe, max_itr=10, USE_CUDA=True, VERBOSE=True):
+    """Get a batch sample from the NGM model.
+    
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        Ds (list of str): Ordered features list 
+        max_itr (int): Max number of iterations for inference
+
+    Returns:
+        xs(dict) = {'feature name': sample value} 
+    """
+    # Initialize set of samples with feature means
+    model, scaler, feature_means = model_NGM
+    feature_names = feature_means.index
+    Xy = pd.DataFrame({'header':feature_names, 0:feature_means.values}).transpose()
+    Xy.columns = Xy.loc['header']
+    Xy.drop(['header'], inplace=True)
+    Xy.index.name = None
+    # replicating the rows, num_samples times
+    Xy = Xy.append([Xy]*(num_samples-1),ignore_index=True)    
