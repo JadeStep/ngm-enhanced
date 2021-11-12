@@ -1385,3 +1385,26 @@ def inference_batch(
             if b==numB-1:
                 _b_size = Xy.shape[0]-b*B
                 Xi = torch.cat([ft[b*B:] for ft in feature_tensors], 1)
+                mask_known = mask_known[:_b_size, :]
+                # mask_unknown = mask_unknown[:_b_size, :]
+            else:
+                Xi = torch.cat([ft[b*B:(b+1)*B] for ft in feature_tensors], 1)
+            # reset the grads to zero
+            optimizer.zero_grad()
+            # Running the NGM model 
+            Xp = model.MLP(Xi)
+            # Output should be Xi*known_mask with no grad
+            Xo = Xi.clone().detach()
+            # Set the gradient to False
+            Xo.requires_grad = False
+            # Calculate the Inference loss using the known values
+            # reg_loss = mse(mask_known*Xp, mask_known*Xo)
+            reg_loss = mse(Xp, Xo)
+            # reg_loss = torch.log(reg_loss)
+            # reg_loss = mse(Xp, Xo)
+            # calculate the backward gradients
+            reg_loss.backward()
+            # updating the optimizer params with the grads
+            optimizer.step()
+            # Selecting the output with the lowest inference loss
+            curr_reg_loss = dp.t2np(reg_loss)
