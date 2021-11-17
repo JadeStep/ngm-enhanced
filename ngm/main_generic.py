@@ -1498,3 +1498,33 @@ def get_sample_batch(model_NGM, Ds, num_samples, dtype, ohe, max_itr=10, USE_CUD
         _feature_samples = pd.DataFrame(_feature_samples, columns=[str(f0)]).astype('str') 
         _feature_samples = transform2onehot(cat_values, _feature_samples)
         Xy[c_names] = _feature_samples[c_names]
+        # Sample num_samples categories based on the probabilities
+    observed_features = []
+    for i, f in enumerate(Ds): # Ds contains features with original names
+        print(f'feature {i, f}')
+        # Add uncertainty to current feature and make it observed (batch mode)
+        if dtype[f] == 'r': # Numerical
+            current_feature = [f]
+            # Adding uniform noise to numerical, small % of random noise 
+            eps = np.random.uniform(-0.01*np.abs(Xy[f]), 0.01*np.abs(Xy[f]))
+            Xy[f] = Xy[f]+eps
+        elif dtype[f] == 'c': # Categorical
+            current_feature = cat_names[f]
+            current_cat_values = [fc.replace(f+'_', '') for fc in current_feature]            
+            def sample_cat_from_prob(row):
+                # Scale, so that the sum is one and get the probabilities
+                p = np.array(row).clip(min=0)# - min(row)
+                if sum(p)==0:
+                    p = None
+                else:
+                    p = p/sum(p)
+                sampled_feature = np.random.choice(current_cat_values, 1, p=p)
+                return sampled_feature[0]
+
+            current_feature_samples = Xy[current_feature].apply(lambda row: sample_cat_from_prob(row), axis=1)
+            current_feature_samples = pd.DataFrame(current_feature_samples).astype('str')
+            current_feature_samples.columns=[str(f)]
+            current_feature_samples = transform2onehot(current_cat_values, current_feature_samples)
+            Xy[current_feature] = current_feature_samples[current_feature]
+        else:
+            print(f'Not valid dtype {f, dtype}')
