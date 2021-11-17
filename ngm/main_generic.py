@@ -1469,3 +1469,32 @@ def get_sample_batch(model_NGM, Ds, num_samples, dtype, ohe, max_itr=10, USE_CUD
     Xy.index.name = None
     # replicating the rows, num_samples times
     Xy = Xy.append([Xy]*(num_samples-1),ignore_index=True)    
+    cat_names = dp.get_cat_names(ohe, dtype)
+    def transform2onehot(cat_values, _feature_samples):
+        # Convert to one-hot
+        _ohe = preprocessing.OneHotEncoder(categories=[cat_values])#(handle_unknown='ignore')
+        _ohe.fit(_feature_samples)
+        _feature_samples = _ohe.transform(_feature_samples).toarray()
+        _feature_samples = pd.DataFrame(_feature_samples, columns=_ohe.get_feature_names_out())
+        return _feature_samples
+    f0 = Ds[0]  # Get the first feature
+    # Initializing the first feature over the entire range.
+    if dtype[f0]=='r':
+        # Randomly assign the value of the 1st feature.
+        feature_min = pd.Series(scaler.data_min_, index=feature_means.index)
+        feature_max = pd.Series(scaler.data_max_, index=feature_means.index)
+        # Uniformly sample the first feature value from its range.
+        _feature_samples = np.random.uniform(feature_min[f0], feature_max[f0], num_samples)
+        Xy[f0] = _feature_samples
+    elif dtype[f0]=='c':
+        # Find all the categories and their occurrence probabilities
+        # NOTE: the mean values of one-hot features will give their relative abundance
+        # or the frequentist probability values
+        c_names = cat_names[f0]
+        probabilities = feature_means[c_names].values
+        cat_values = [fc.replace(f0+'_', '') for fc in c_names]
+        # Convert to list of lists for onehot enc to work
+        _feature_samples = [[str(fs)] for fs in np.random.choice(cat_values, num_samples, p=probabilities)]
+        _feature_samples = pd.DataFrame(_feature_samples, columns=[str(f0)]).astype('str') 
+        _feature_samples = transform2onehot(cat_values, _feature_samples)
+        Xy[c_names] = _feature_samples[c_names]
