@@ -1528,3 +1528,27 @@ def get_sample_batch(model_NGM, Ds, num_samples, dtype, ohe, max_itr=10, USE_CUD
             Xy[current_feature] = current_feature_samples[current_feature]
         else:
             print(f'Not valid dtype {f, dtype}')
+
+        observed_features.extend(current_feature)
+        target_features = list(set(feature_names)-set(observed_features))
+        if len(target_features)>0:
+            Xy = inference_batch(
+                model_NGM, 
+                Xy, 
+                target_features, 
+                lr=0.00001, # 0.1, 
+                max_itr=max_itr,
+                VERBOSE=VERBOSE,
+                reg_loss_th=1e-3, #1e-1, 
+                BATCH_SIZE=10000,
+                USE_CUDA=USE_CUDA
+            )
+            print(f'Current batch samples: {Xy.shape}')#[observed_features]}')
+    return Xy
+
+
+def sampling(model_NGM, Gr, dtype, ohe, num_samples=100, max_infer_itr=20, USE_CUDA=True, VERBOSE=True, column_order=None):
+    """Get samples from the learned NGM by using the sampling algorithm. 
+    The procedure is akin to Gibbs sampling. Batch sampling. 
+
+    Args:
