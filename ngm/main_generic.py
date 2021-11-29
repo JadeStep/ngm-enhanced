@@ -1552,3 +1552,31 @@ def sampling(model_NGM, Gr, dtype, ohe, num_samples=100, max_infer_itr=20, USE_C
     The procedure is akin to Gibbs sampling. Batch sampling. 
 
     Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        Gr (nx.Graph): Conditional independence graph with original nodes
+        num_samples (int): The number of samples needed.
+        max_infer_itr (int): Max #iterations to run per inference per sample.
+
+    Returns:
+        Xs (pd.DataFrame): [{'feature name': pred-value} x num_samples]
+    """
+    RUNS=100 # Batch size = 1mil/10
+    num_samples_per_run = int(num_samples/RUNS)#100) # 50K samples
+    dfs = [] # Collection of feature dicts
+    graph_nodes = Gr.nodes()
+    # graph_nodes = np.random.choice(graph_nodes, RUNS, replace=False)
+    print(f'set of starting nodes {graph_nodes}')
+    for i, n1 in enumerate(graph_nodes):
+        print(f'Start node {i}/{len(Gr.nodes())}: {n1}')
+        # Get the BFS ordering
+        edges = nx.bfs_edges(Gr, n1)
+        Ds = [n1] + [v for u, v in edges] # original nodes, convert to one-hot
+        _Xs = get_sample_batch(model_NGM, Ds, num_samples_per_run, dtype, ohe, max_itr=max_infer_itr, USE_CUDA=USE_CUDA, VERBOSE=VERBOSE)
+        _dfs = original_from_onehot(_Xs, dtype, ohe)
+        # Save the samples created
+        if column_order is not None:
+            _dfs = _dfs[column_order]
