@@ -1580,3 +1580,34 @@ def sampling(model_NGM, Gr, dtype, ohe, num_samples=100, max_infer_itr=20, USE_C
         # Save the samples created
         if column_order is not None:
             _dfs = _dfs[column_order]
+        dfs.append(_dfs)
+    dfs = pd.concat(dfs, axis=0)
+    print(f'Output Samples {dfs}')
+    # Xs = pd.DataFrame(Xs, columns=Ds)
+    return dfs
+
+
+def fast_sampling(model_NGM, Gr, dtype, ohe, num_samples=100, max_infer_itr=20, USE_CUDA=True, VERBOSE=True, column_order=None):
+    """Get samples from the learned NGM by using the sampling algorithm. 
+    The procedure is akin to Gibbs sampling. Batch sampling. 
+    Randomly choose one starting node. 
+
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        Gr (nx.Graph): Conditional independence graph with original nodes
+        num_samples (int): The number of samples needed.
+        max_infer_itr (int): Max #iterations to run per inference per sample.
+
+    Returns:
+        Xs (pd.DataFrame): [{'feature name': pred-value} x num_samples]
+    """
+    Xs = [] # Collection of feature dicts
+    start_nodes = np.random.choice(Gr.nodes(), 1, replace=False) # ['cause_of_death', 'combgest', 'brthwgt']
+    for i, start_node in enumerate(start_nodes):
+        print(f'Start sampling from node {start_node}, num samples {num_samples}')
+        # Get the BFS ordering
+        edges = nx.bfs_edges(Gr, start_node)
