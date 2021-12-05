@@ -1638,3 +1638,25 @@ def batch_inference_for_sampling(
     using gradient descent to minimize the inference regression loss. 
     Regression: Xp = f(Xi) 
     Input Xi (learnable)
+    Reg loss for inference = ||Xp - Xi||^2_2
+
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        node_feature_dict (dict): {'name':value}.
+        lr (float): Learning rate for the optimizer.
+        max_itr (int): For the convergence.
+        VERBOSE (bool): enable/disable print statements.
+        reg_loss_th (float): The threshold for reg loss convergence.
+
+    Returns:
+        Xpred (pd.DataFrame): Predictions for the unobserved features.
+            {'feature name': pred-value} 
+    """
+    device = torch.device("cuda") if USE_CUDA else torch.device("cpu") 
+    print(f'Using "{device}" compute')
+    B = min(BATCH_SIZE, Xs.shape[0])
+    numB = int(np.ceil(Xs.shape[0]/B))
