@@ -1611,3 +1611,30 @@ def fast_sampling(model_NGM, Gr, dtype, ohe, num_samples=100, max_infer_itr=20, 
         print(f'Start sampling from node {start_node}, num samples {num_samples}')
         # Get the BFS ordering
         edges = nx.bfs_edges(Gr, start_node)
+        Ds = [start_node] + [v for u, v in edges] # original nodes, convert to one-hot
+        _Xs = get_sample_batch(model_NGM, Ds, num_samples, dtype, ohe, max_itr=max_infer_itr, USE_CUDA=USE_CUDA, VERBOSE=VERBOSE)
+        if column_order is not None:
+            _Xs = _Xs[column_order]
+        Xs.append(_Xs)
+    Xs = pd.concat(Xs, axis=0)
+    print(f'Output Samples {Xs}')
+    return Xs
+
+
+# ********** SUPER FAST! ********
+def batch_inference_for_sampling(
+    model_NGM, 
+    Xs, 
+    lr=0.001, 
+    max_itr=100,
+    VERBOSE=True,
+    reg_loss_th=1e-5, 
+    BATCH_SIZE=1000,
+    USE_CUDA=True
+    ):
+    """Algorithm to run the batch inference for sampling.
+
+    The input is set as an unknown learnable tensor and is optimized 
+    using gradient descent to minimize the inference regression loss. 
+    Regression: Xp = f(Xi) 
+    Input Xi (learnable)
