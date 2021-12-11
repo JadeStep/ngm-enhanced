@@ -1725,3 +1725,28 @@ def batch_inference_for_sampling(
         # Collect the predictions
         best_Xp_batch.extend(best_Xp)
     # inverse normalize the prediction
+    Xpred = dp.inverse_norm_table(best_Xp_batch, scaler)
+    Xpred = pd.DataFrame(Xpred, columns=feature_names)
+    return Xpred
+
+
+
+def sampling_using_direct_gradient(model_NGM, Gr, dtype, ohe, num_samples=100, max_infer_itr=20, eps=3.0, USE_CUDA=True, VERBOSE=True, column_order=None):
+    """Get samples from the learned NGM by direct sampling. Add Uniform 
+    noise to the mean vector, then run inference with no observed features.
+    The gradient descent over the input tensor will learn the most likely
+    vector input that matches the NGM criteria of the input matching the output,
+    which means that it is a high probability sample. 
+
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        Gr (nx.Graph): Conditional independence graph with original nodes
+        num_samples (int): The number of samples needed.
+        max_infer_itr (int): Max #iterations to run per inference per sample.
+
+    Returns:
+        Xs (pd.DataFrame): [{'feature name': pred-value} x num_samples]
