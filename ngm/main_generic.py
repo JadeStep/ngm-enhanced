@@ -1700,3 +1700,28 @@ def batch_inference_for_sampling(
             Xi = Xs[b*B:]
         else:
             Xi = Xs[b*B:(b+1)*B]
+
+        while curr_reg_loss > reg_loss_th and itr<max_itr: # Until convergence
+            # Creating the tensor input to the MLP model
+            # reset the grads to zero
+            optimizer.zero_grad()
+            # Running the NGM model 
+            Xp = model.MLP(Xi)
+            # Calculate the Inference loss 
+            reg_loss = mse(Xp, Xi)
+            # reg_loss = torch.log(reg_loss)
+            reg_loss.backward()
+            # updating the optimizer params with the grads
+            optimizer.step()
+            # Selecting the output with the lowest inference loss
+            curr_reg_loss = dp.t2np(reg_loss)
+            if curr_reg_loss < best_reg_loss:
+                best_reg_loss = curr_reg_loss
+                best_Xp = dp.t2np(Xi) #Xi
+            if not itr%PRINT and VERBOSE: 
+                print(f'itr {itr}: reg loss {curr_reg_loss}') #, Xi={Xi}, Xp={Xp}')
+
+            itr += 1
+        # Collect the predictions
+        best_Xp_batch.extend(best_Xp)
+    # inverse normalize the prediction
