@@ -1683,3 +1683,20 @@ def batch_inference_for_sampling(
     optimizer = torch.optim.Adam(
         optimizer_parameters,
         lr=lr, 
+        betas=(0.9, 0.999),
+        eps=1e-08,
+        # weight_decay=0
+    )
+    # Minimizing for the regression loss for the known values.
+    best_Xp_batch = []
+    for b in range(numB):
+        print(f'Batch {b}/{numB}')
+        itr = 0
+        curr_reg_loss = np.inf
+        PRINT = int(max_itr/10) + 1 # will print only 10 times
+        mse = nn.MSELoss() # regression loss 
+        best_reg_loss = np.inf
+        if b==numB-1:
+            Xi = Xs[b*B:]
+        else:
+            Xi = Xs[b*B:(b+1)*B]
