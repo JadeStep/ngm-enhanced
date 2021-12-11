@@ -1660,3 +1660,26 @@ def batch_inference_for_sampling(
     print(f'Using "{device}" compute')
     B = min(BATCH_SIZE, Xs.shape[0])
     numB = int(np.ceil(Xs.shape[0]/B))
+    # Get the NGM params
+    model, scaler, feature_means = model_NGM
+    model = model.to(device)
+    # Get the feature names and input dimension 
+    D = len(feature_means)
+    feature_names = feature_means.index
+    # Arrange the columns of input data to match feature means
+    Xs = Xs[feature_names] # BxD
+    # Freeze the model weights
+    model.eval()
+    for p in model.parameters():
+        p.requires_grad = False
+    # Scale the input data
+    Xs = pd.DataFrame(scaler.transform(Xs), columns=Xs.columns)
+    # Input (unknown) tensors as learnable.
+    Xs = dp.convertToTorch(np.array(Xs), req_grad=True, use_cuda=USE_CUDA)
+    print(f'Input shape: {Xs.shape}')
+    # Setting the optimization parameters
+    optimizer_parameters = [Xs]
+    # Define the optimizer
+    optimizer = torch.optim.Adam(
+        optimizer_parameters,
+        lr=lr, 
