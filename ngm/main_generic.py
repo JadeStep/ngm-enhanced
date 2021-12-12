@@ -1750,3 +1750,26 @@ def sampling_using_direct_gradient(model_NGM, Gr, dtype, ohe, num_samples=100, m
 
     Returns:
         Xs (pd.DataFrame): [{'feature name': pred-value} x num_samples]
+    """
+    def convert_cats_to_one_hot(Xs):
+        # Convert the categorical variables to one-hot
+        cat_names = dp.get_cat_names(ohe, dtype)
+        def transform2onehot(cat_values, _feature_samples):
+            # Convert to one-hot
+            _ohe = preprocessing.OneHotEncoder(categories=[cat_values])#(handle_unknown='ignore')
+            _ohe.fit(_feature_samples)
+            _feature_samples = _ohe.transform(_feature_samples).toarray()
+            _feature_samples = pd.DataFrame(_feature_samples, columns=_ohe.get_feature_names_out())
+            return _feature_samples
+        #  and binary to their range. 
+        for f in dtype.keys():
+            if dtype[f]=='c':
+                # Get the one hot feature names for the original category
+                current_feature = cat_names[f]
+                current_cat_values = [fc.replace(f+'_', '') for fc in current_feature]
+                def sample_cat_from_prob(row):
+                    # Scale, so that the sum is one and get the probabilities
+                    p = np.array(row).clip(min=0)# - min(row)
+                    if sum(p)==0:
+                        p = None
+                    else:
