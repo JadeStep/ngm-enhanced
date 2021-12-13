@@ -1773,3 +1773,30 @@ def sampling_using_direct_gradient(model_NGM, Gr, dtype, ohe, num_samples=100, m
                     if sum(p)==0:
                         p = None
                     else:
+                        p = p/sum(p)
+                    # sampled_feature = np.random.choice(current_cat_values, 1, p=p)[0]
+                    sampled_feature = current_cat_values[np.argmax(p)]
+                    return sampled_feature
+
+                current_feature_samples = Xs[current_feature].apply(lambda row: sample_cat_from_prob(row), axis=1)
+                current_feature_samples = pd.DataFrame(current_feature_samples).astype('str')
+                current_feature_samples.columns=[str(f)]
+                current_feature_samples = transform2onehot(current_cat_values, current_feature_samples)
+                Xs[current_feature] = current_feature_samples[current_feature]
+        return Xs
+
+    # Get the feature means
+    model, scaler, feature_means = model_NGM
+    feature_names = feature_means.index  # one-hot included in feature names
+    Xs = pd.DataFrame({'header':feature_names, 0:feature_means.values}).transpose()
+    Xs.columns = Xs.loc['header']
+    Xs.drop(['header'], inplace=True)
+    Xs.index.name = None
+    # replicating the rows, num_samples times
+    Xs = Xs.append([Xs]*(num_samples-1),ignore_index=True)    
+    # Adding uniform noise to numerical, small % of random noise 
+    eps_noise = np.random.uniform(-1*eps*np.abs(Xs), eps*np.abs(Xs))
+    Xs = Xs+eps_noise
+    # print(f'Before calling batch inference {Xs.shape, eps_noise.shape, eps_noise, Xs}')
+    Xs = batch_inference_for_sampling(  # UPDATE THE PARAMS HERE ******
+        model_NGM, 
