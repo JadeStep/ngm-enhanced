@@ -1825,3 +1825,27 @@ def old_fast_sampling(model_NGM, Gr, dtype, ohe, num_samples=100, max_infer_itr=
             model (torch.nn.object): A MLP model for NGM's `neural' view,
             scaler (sklearn object): Learned normalizer for the input data,
             feature_means (pd.Series): [feature:mean val]
+        ]
+        Gr (nx.Graph): Conditional independence graph with original nodes
+        num_samples (int): The number of samples needed.
+        max_infer_itr (int): Max #iterations to run per inference per sample.
+
+    Returns:
+        Xs (pd.DataFrame): [{'feature name': pred-value} x num_samples]
+    """
+    dfs = [] # Collection of feature dicts
+    start_node = np.random.choice(Gr.nodes(), 1, replace=False)[0]
+    print(f'Start sampling from node {start_node}, num samples {num_samples}')
+    # Get the BFS ordering
+    edges = nx.bfs_edges(Gr, start_node)
+    Ds = [start_node] + [v for u, v in edges] # original nodes, convert to one-hot
+    Xs = get_sample_batch(model_NGM, Ds, num_samples, dtype, ohe, max_itr=max_infer_itr, USE_CUDA=USE_CUDA, VERBOSE=VERBOSE)
+    dfs = original_from_onehot(Xs, dtype, ohe)
+    # Save the samples created
+    if column_order is not None:
+        dfs = dfs[column_order]
+    print(f'Output Samples {dfs}')
+    Xs = pd.DataFrame(Xs, columns=Ds)
+    return dfs, Xs
+
+def get_sample_single(model_NGM, Ds, max_itr=10):
