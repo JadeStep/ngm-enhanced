@@ -1800,3 +1800,28 @@ def sampling_using_direct_gradient(model_NGM, Gr, dtype, ohe, num_samples=100, m
     # print(f'Before calling batch inference {Xs.shape, eps_noise.shape, eps_noise, Xs}')
     Xs = batch_inference_for_sampling(  # UPDATE THE PARAMS HERE ******
         model_NGM, 
+        Xs, 
+        lr=0.01, # 0.1, 
+        max_itr=max_infer_itr,
+        VERBOSE=VERBOSE,
+        reg_loss_th=1e-5, #1e-1, 
+        BATCH_SIZE=10000,
+        USE_CUDA=USE_CUDA
+    )
+    # print('convert_cats_to_one_hot')
+    # Xs = convert_cats_to_one_hot(Xs)
+    print(f'Batch samples: {Xs, Xs.shape}')
+    return Xs
+
+
+
+def old_fast_sampling(model_NGM, Gr, dtype, ohe, num_samples=100, max_infer_itr=20, USE_CUDA=True, VERBOSE=True, column_order=None):
+    """Get samples from the learned NGM by using the sampling algorithm. 
+    The procedure is akin to Gibbs sampling. Batch sampling. 
+    Randomly choose one starting node. 
+
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
