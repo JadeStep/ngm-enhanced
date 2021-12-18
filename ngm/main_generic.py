@@ -1880,3 +1880,27 @@ def get_sample_single(model_NGM, Ds, max_itr=10):
             model_NGM, 
             features_dict, 
             unknown_cat,
+            lr=0.01, 
+            max_itr=max_itr, 
+            VERBOSE=False
+        )
+        # random noise for the feature.
+        val = pred_x[f][0]
+        # Add a small % of random noise 
+        eps = np.random.uniform(-0.01*np.abs(val), 0.01*np.abs(val))
+        features_dict[f] = val + eps
+    return features_dict
+    
+
+def sampling_numerical(model_NGM, G, num_samples=10, max_infer_itr=20):
+    """Get samples from the learned NGM by using the sampling algorithm. 
+    The procedure is akin to Gibbs sampling. 
+
+    TODO: Implement batch sampling. 
+
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
