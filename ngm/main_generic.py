@@ -1904,3 +1904,39 @@ def sampling_numerical(model_NGM, G, num_samples=10, max_infer_itr=20):
             scaler (sklearn object): Learned normalizer for the input data,
             feature_means (pd.Series): [feature:mean val]
         ]
+        G (nx.Graph): Conditional independence graph.
+        num_samples (int): The number of samples needed.
+        max_infer_itr (int): Max #iterations to run per inference per sample.
+
+    Returns:
+        Xs (pd.DataFrame): [{'feature name': pred-value} x num_samples]
+    """
+    Xs = []  # Collection of feature dicts
+    for i in range(num_samples):
+        # Select a node at random
+        n1 = np.random.choice(G.nodes(), 1)[0]
+        if not i%100: print(f'Sample={i}')#, Source node {n1}')
+        # Get the BFS ordering
+        edges = nx.bfs_edges(G, n1)
+        Ds = [n1] + [v for u, v in edges]
+        Xs.append(get_sample_single(model_NGM, Ds, max_itr=max_infer_itr))
+    # Convert to pd.DataFrame
+    Xs = pd.DataFrame(Xs, columns=Ds)
+    return Xs
+
+#************************************************************************
+
+
+# %%%%%%%%%%%%%%% Plot NGM graphs %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+def adjust_graph_sparsity(G_in, sparsity=1, roundOFF=4):
+    G = nx.Graph() # G_out 
+    names = np.array(G_in.nodes())
+    G.add_nodes_from(names)
+    rho = np.array(nx.adjacency_matrix(G_in).todense())
+    D = rho.shape[-1]
+    
+    # determining the threshold to maintain the sparsity level of the graph
+    def upper_tri_indexing(A):
+        m = A.shape[0]
+        r,c = np.triu_indices(m,1)
