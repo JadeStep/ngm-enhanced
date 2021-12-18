@@ -1849,3 +1849,34 @@ def old_fast_sampling(model_NGM, Gr, dtype, ohe, num_samples=100, max_infer_itr=
     return dfs, Xs
 
 def get_sample_single(model_NGM, Ds, max_itr=10):
+    """Get a sample from the NGM model.
+    
+    Args:
+        model_NGM (list): [
+            model (torch.nn.object): A MLP model for NGM's `neural' view,
+            scaler (sklearn object): Learned normalizer for the input data,
+            feature_means (pd.Series): [feature:mean val]
+        ]
+        Ds (list of str): Ordered features list 
+        max_itr (int): Max number of iterations for inference
+
+    Returns:
+        xs(dict) = {'feature name': sample value} 
+    """
+    # Get the NGM params
+    model, scaler, feature_means = model_NGM
+    # Initialize the features dict for sampling procedure
+    unknown_cat = 'u'
+    features_dict = {f:unknown_cat for f in Ds}
+    # Randomly assign the value of the 1st feature.
+    feature_min = pd.Series(scaler.data_min_, index=feature_means.index)
+    feature_max = pd.Series(scaler.data_max_, index=feature_means.index)
+    f0 = Ds[0]  # Get the first feature
+    # Uniformly sample the first feature value from its range.
+    f0_val = np.random.uniform(feature_min[f0], feature_max[f0]) 
+    features_dict[Ds[0]] = f0_val # set the known feature value
+    for f in Ds:
+        pred_x = inference(
+            model_NGM, 
+            features_dict, 
+            unknown_cat,
