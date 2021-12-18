@@ -1940,3 +1940,35 @@ def adjust_graph_sparsity(G_in, sparsity=1, roundOFF=4):
     def upper_tri_indexing(A):
         m = A.shape[0]
         r,c = np.triu_indices(m,1)
+        return A[r,c]
+
+    rho_upper = upper_tri_indexing(np.abs(rho))
+    num_non_zeros = int(sparsity*len(rho_upper))
+    rho_upper.sort()
+    th = rho_upper[-num_non_zeros]
+    print(f'Sparsity {sparsity} using threshold {th}')
+    th_pos, th_neg = th, -1*th
+
+    for i in range(D):
+        for j in range(i+1, D):
+            if rho[i,j] > th_pos:
+                G.add_edge(names[i], names[j], color='green', weight=round(rho[i,j], roundOFF), label='+')
+            elif rho[i,j] < th_neg:
+                G.add_edge(names[i], names[j], color='red', weight=round(rho[i,j], roundOFF), label='-')
+    return G
+
+
+
+def get_graph_NGM(model_NGM, sparsity=1):
+    model, scaler, feature_means = model_NGM
+    # Get the dependency matrix
+    prod_W = dp.t2np(product_weights_MLP(model))  
+    # Get the adjacency matrix (symmetric)
+    adj = (prod_W + np.transpose(prod_W))/2.0
+    G = nx.from_numpy_matrix(adj)
+    # add node names
+    mapping = {i:f for i, f in enumerate(feature_means.index)}
+    G = nx.relabel_nodes(G, mapping)
+    # adjust sparsity
+    G = adjust_graph_sparsity(G, sparsity=sparsity)
+    return G
