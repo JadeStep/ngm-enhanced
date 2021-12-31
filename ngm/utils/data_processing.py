@@ -4,4 +4,5 @@ functions for neural graphical model analytics.
 """
 import matplotlib.pyplot as plt
 import numpy as np
-import n
+import networkx as nx
+from pyvis impo
