@@ -6,4 +6,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import networkx as nx
 from pyvis import network as net
-from PIL impo
+from PIL import Image
+import io
+import pa
