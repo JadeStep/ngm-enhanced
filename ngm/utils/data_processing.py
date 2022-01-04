@@ -10,4 +10,4 @@ from PIL import Image
 import io
 import pandas as pd
 from sklearn import covariance
-fr
+from sklearn import preprocessing
