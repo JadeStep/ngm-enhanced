@@ -12,4 +12,8 @@ import pandas as pd
 from sklearn import covariance
 from sklearn import preprocessing
 from time import time
-import torc
+import torch
+
+
+
+def function_pl
