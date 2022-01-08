@@ -16,4 +16,6 @@ import torch
 
 
 
-def function_plots_for_target(plot_d
+def function_plots_for_target(plot_dict):
+    """
+    plot_
