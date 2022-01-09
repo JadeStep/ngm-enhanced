@@ -18,4 +18,5 @@ import torch
 
 def function_plots_for_target(plot_dict):
     """
-    plot_
+    plot_dict ={
+        target: {
