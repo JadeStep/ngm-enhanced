@@ -26,4 +26,5 @@ def function_plots_for_target(plot_dict):
             }
     }
     """
-    #
+    # Get the target
+    target = list
