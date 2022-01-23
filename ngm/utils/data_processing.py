@@ -21,4 +21,6 @@ def function_plots_for_target(plot_dict):
     plot_dict ={
         target: {
             source1: [x, fx, title], 
-            source2: [x, fx, tit
+            source2: [x, fx, title], 
+            ...,
+        
