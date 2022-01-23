@@ -27,4 +27,5 @@ def function_plots_for_target(plot_dict):
     }
     """
     # Get the target
-    target = list
+    target = list(plot_dict.keys())
+    
