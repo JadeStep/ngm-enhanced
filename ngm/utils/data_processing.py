@@ -30,4 +30,4 @@ def function_plots_for_target(plot_dict):
     target = list(plot_dict.keys())
     if len(target)==1:
         target = target[0]
-    num_sourc
+    num_sources = len(plot_dict[target
