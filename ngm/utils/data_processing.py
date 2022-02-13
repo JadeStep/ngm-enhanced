@@ -29,4 +29,5 @@ def function_plots_for_target(plot_dict):
     # Get the target
     target = list(plot_dict.keys())
     if len(target)==1:
-        target = t
+        target = target[0]
+    num_sourc
