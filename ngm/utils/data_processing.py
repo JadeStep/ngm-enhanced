@@ -33,4 +33,5 @@ def function_plots_for_target(plot_dict):
     num_sources = len(plot_dict[target])
     # fig = plt.figure(figsize=(int(3*num_sources), 25))
     # fig = plt.figure(figsize=(5, int(5*num_sources)))
-    fig = plt.figure(figsize=(15, 1
+    fig = plt.figure(figsize=(15, 15))
+    p=min(num_sources, 3)
