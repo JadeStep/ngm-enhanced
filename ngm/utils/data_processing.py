@@ -35,4 +35,5 @@ def function_plots_for_target(plot_dict):
     # fig = plt.figure(figsize=(5, int(5*num_sources)))
     fig = plt.figure(figsize=(15, 15))
     p=min(num_sources, 3)
-    for i, source in enumerate(plot_dict[targ
+    for i, source in enumerate(plot_dict[target].keys()):
+        ax = plt.subplot
