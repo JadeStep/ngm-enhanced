@@ -38,4 +38,4 @@ def function_plots_for_target(plot_dict):
     for i, source in enumerate(plot_dict[target].keys()):
         ax = plt.subplot(p+1, int(num_sources/p), i+1) # (grid_x, grid_y, plot_num)
         # plt.subplot(num_sources, 1, i+1)
-        x,
+        x, fx, title = plot_dict[targ
