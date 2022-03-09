@@ -40,4 +40,5 @@ def function_plots_for_target(plot_dict):
         # plt.subplot(num_sources, 1, i+1)
         x, fx, title = plot_dict[target][source]
         # plot the function
-        plt.
+        plt.plot(x, fx, 'b')
+        ax
