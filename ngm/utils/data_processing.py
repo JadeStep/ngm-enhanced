@@ -41,4 +41,5 @@ def function_plots_for_target(plot_dict):
         x, fx, title = plot_dict[target][source]
         # plot the function
         plt.plot(x, fx, 'b')
-        ax.tick_params(axis='both', which='major', labels
+        ax.tick_params(axis='both', which='major', labelsize=20)
+        
