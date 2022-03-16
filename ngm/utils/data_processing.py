@@ -43,4 +43,6 @@ def function_plots_for_target(plot_dict):
         plt.plot(x, fx, 'b')
         ax.tick_params(axis='both', which='major', labelsize=20)
         ax.tick_params(axis='both', which='minor', labelsize=20)
-        plt.title(title, fontsize=2
+        plt.title(title, fontsize=20)
+    # show the plot
+   
