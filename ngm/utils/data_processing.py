@@ -49,4 +49,4 @@ def function_plots_for_target(plot_dict):
     plt.show()
 
 
-def plot_functio
+def plot_function(x, fx, title=f'plot of (x, fx)'):
