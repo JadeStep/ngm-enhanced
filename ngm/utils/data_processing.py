@@ -45,4 +45,5 @@ def function_plots_for_target(plot_dict):
         ax.tick_params(axis='both', which='minor', labelsize=20)
         plt.title(title, fontsize=20)
     # show the plot
-    plt.savefig(f'plot_{tar
+    plt.savefig(f'plot_{target}.jpg', dpi=300)
+    plt.sh
