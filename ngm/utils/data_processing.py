@@ -46,4 +46,7 @@ def function_plots_for_target(plot_dict):
         plt.title(title, fontsize=20)
     # show the plot
     plt.savefig(f'plot_{target}.jpg', dpi=300)
-    plt.sh
+    plt.show()
+
+
+def plot_functio
