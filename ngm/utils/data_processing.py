@@ -50,3 +50,4 @@ def function_plots_for_target(plot_dict):
 
 
 def plot_function(x, fx, title=f'plot of (x, fx)'):
+    # setting the axes at the 
