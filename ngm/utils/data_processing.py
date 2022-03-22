@@ -53,4 +53,5 @@ def plot_function(x, fx, title=f'plot of (x, fx)'):
     # setting the axes at the centre
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    ax.spines['left'].set_position('center
+    ax.spines['left'].set_position('center')
+    ax.spines['bott
