@@ -54,4 +54,5 @@ def plot_function(x, fx, title=f'plot of (x, fx)'):
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     ax.spines['left'].set_position('center')
-    ax.spines['bottom'].set_position('ze
+    ax.spines['bottom'].set_position('zero')
+    ax.spines['right'].set_col
