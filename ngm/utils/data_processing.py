@@ -56,4 +56,5 @@ def plot_function(x, fx, title=f'plot of (x, fx)'):
     ax.spines['left'].set_position('center')
     ax.spines['bottom'].set_position('zero')
     ax.spines['right'].set_color('none')
-    ax.spines['
+    ax.spines['top'].set_color('none')
+    ax.x
