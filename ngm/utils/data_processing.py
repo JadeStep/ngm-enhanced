@@ -59,4 +59,5 @@ def plot_function(x, fx, title=f'plot of (x, fx)'):
     ax.spines['top'].set_color('none')
     ax.xaxis.set_ticks_position('bottom')
     ax.yaxis.set_ticks_position('left')
-    # plot the 
+    # plot the function
+    plt.plot(x, fx,
