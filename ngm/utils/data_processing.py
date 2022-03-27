@@ -64,3 +64,5 @@ def plot_function(x, fx, title=f'plot of (x, fx)'):
     plt.title(title)
     # show the plot
     # plt.savefig('plot.jpg', dpi=300)
+    # plt.show()
+    retu
