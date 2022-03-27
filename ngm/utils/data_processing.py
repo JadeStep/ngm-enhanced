@@ -63,4 +63,4 @@ def plot_function(x, fx, title=f'plot of (x, fx)'):
     plt.plot(x, fx, 'b')
     plt.title(title)
     # show the plot
-    # plt.savef
+    # plt.savefig('plot.jpg', dpi=300)
