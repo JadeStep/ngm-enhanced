@@ -61,4 +61,6 @@ def plot_function(x, fx, title=f'plot of (x, fx)'):
     ax.yaxis.set_ticks_position('left')
     # plot the function
     plt.plot(x, fx, 'b')
-    plt.title(title
+    plt.title(title)
+    # show the plot
+    # plt.savef
