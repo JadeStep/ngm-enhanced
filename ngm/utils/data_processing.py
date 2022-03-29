@@ -65,4 +65,7 @@ def plot_function(x, fx, title=f'plot of (x, fx)'):
     # show the plot
     # plt.savefig('plot.jpg', dpi=300)
     # plt.show()
-    retu
+    return 
+
+
+def retrieve_graph(graph_edge
