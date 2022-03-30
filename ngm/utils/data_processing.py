@@ -69,4 +69,5 @@ def plot_function(x, fx, title=f'plot of (x, fx)'):
 
 
 def retrieve_graph(graph_edges):
-    """ Read the graph edgelist and
+    """ Read the graph edgelist and 
+    convert it to a networ
