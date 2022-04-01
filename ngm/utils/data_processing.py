@@ -72,4 +72,5 @@ def retrieve_graph(graph_edges):
     """ Read the graph edgelist and 
     convert it to a networkx graph.
     """
-    graph_edges = graph_edges.replac
+    graph_edges = graph_edges.replace('(', '').replace(')', '')
+  
