@@ -73,4 +73,4 @@ def retrieve_graph(graph_edges):
     convert it to a networkx graph.
     """
     graph_edges = graph_edges.replace('(', '').replace(')', '')
-  
+    graph_edges = graph_edges[2:-1].split
