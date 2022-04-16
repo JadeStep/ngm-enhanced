@@ -74,4 +74,5 @@ def retrieve_graph(graph_edges):
     """
     graph_edges = graph_edges.replace('(', '').replace(')', '')
     graph_edges = graph_edges[2:-1].split("', '")
-    edge_list
+    edge_list = []
+    for e in graph_edges
