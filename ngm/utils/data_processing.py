@@ -78,4 +78,4 @@ def retrieve_graph(graph_edges):
     for e in graph_edges:
         e = e.split(',')
         edge_list.append(
-           
+            (e[0], ''.join(e[1:-2]).lst
