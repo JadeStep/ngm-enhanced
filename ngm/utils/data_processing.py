@@ -77,4 +77,5 @@ def retrieve_graph(graph_edges):
     edge_list = []
     for e in graph_edges:
         e = e.split(',')
-        
+        edge_list.append(
+           
