@@ -79,4 +79,4 @@ def retrieve_graph(graph_edges):
         e = e.split(',')
         edge_list.append(
             (e[0], ''.join(e[1:-2]).lstrip(), 
-            {"weight"
+            {"weight":float(e[-2]), 'color':e[-
