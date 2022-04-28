@@ -81,4 +81,6 @@ def retrieve_graph(graph_edges):
             (e[0], ''.join(e[1:-2]).lstrip(), 
             {"weight":float(e[-2]), 'color':e[-1][1:]})
         )
-    G = nx.Graph
+    G = nx.Graph()
+    G.add_edges_from(edge_list)
+    
