@@ -84,4 +84,8 @@ def retrieve_graph(graph_edges):
     G = nx.Graph()
     G.add_edges_from(edge_list)
     for n in G.nodes():
-        G.nodes[n].update({'category':
+        G.nodes[n].update({'category':'unknown'})
+    return G
+
+
+def get_
