@@ -88,4 +88,4 @@ def retrieve_graph(graph_edges):
     return G
 
 
-def get_
+def get_interactive_graph(G, titl
