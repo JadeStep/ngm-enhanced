@@ -88,4 +88,6 @@ def retrieve_graph(graph_edges):
     return G
 
 
-def get_interactive_graph(G, title='', node_PREFIX='ObsVal')
+def get_interactive_graph(G, title='', node_PREFIX='ObsVal'):
+    Gv = net.Network(
+     
