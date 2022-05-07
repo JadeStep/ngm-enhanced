@@ -91,4 +91,4 @@ def retrieve_graph(graph_edges):
 def get_interactive_graph(G, title='', node_PREFIX='ObsVal'):
     Gv = net.Network(
         notebook=True, 
-    
+         height='750px', width='100%',
