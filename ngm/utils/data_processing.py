@@ -93,4 +93,6 @@ def get_interactive_graph(G, title='', node_PREFIX='ObsVal'):
         notebook=True, 
          height='750px', width='100%', 
     #     bgcolor='#222222', font_color='white',
-        h
+        heading=title
+    )
+   
