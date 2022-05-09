@@ -92,4 +92,5 @@ def get_interactive_graph(G, title='', node_PREFIX='ObsVal'):
     Gv = net.Network(
         notebook=True, 
          height='750px', width='100%', 
-    #     bgcolor='#222222', fon
+    #     bgcolor='#222222', font_color='white',
+        h
