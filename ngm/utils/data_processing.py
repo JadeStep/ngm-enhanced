@@ -96,4 +96,5 @@ def get_interactive_graph(G, title='', node_PREFIX='ObsVal'):
         heading=title
     )
     Gv.from_nx(G.copy(), show_edge_weights=True, edge_weight_transf=(lambda x:x) )
-    for e in G
+    for e in Gv.edges:
+        e['title'] = str(
