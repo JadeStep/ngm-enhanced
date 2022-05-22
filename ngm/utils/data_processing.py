@@ -101,4 +101,4 @@ def get_interactive_graph(G, title='', node_PREFIX='ObsVal'):
         e['value'] = abs(e['weight'])
     if node_PREFIX is not None:
         for n in Gv.nodes:
-            n
+            n['title'] = node_PREFIX
