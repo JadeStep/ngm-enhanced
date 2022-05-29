@@ -110,4 +110,5 @@ def set_feature_values(features_dict, features_known):
     """Updates the feature values with the known categories
 
     Args:
-        features_dict (dict): {'name':'cate
+        features_dict (dict): {'name':'category'}
+        node_attri
