@@ -107,4 +107,7 @@ def get_interactive_graph(G, title='', node_PREFIX='ObsVal'):
 
 
 def set_feature_values(features_dict, features_known):
-    """Updates the feature values with the known cat
+    """Updates the feature values with the known categories
+
+    Args:
+        features_di
