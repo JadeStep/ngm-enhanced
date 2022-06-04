@@ -111,4 +111,6 @@ def set_feature_values(features_dict, features_known):
 
     Args:
         features_dict (dict): {'name':'category'}
-        node_attribute_konwn (dict): {'name':
+        node_attribute_konwn (dict): {'name':'category'}
+
+    Returns:
