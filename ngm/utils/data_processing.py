@@ -114,3 +114,4 @@ def set_feature_values(features_dict, features_known):
         node_attribute_konwn (dict): {'name':'category'}
 
     Returns:
+        features_dict (dict): 
