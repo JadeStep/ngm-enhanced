@@ -117,4 +117,5 @@ def set_feature_values(features_dict, features_known):
         features_dict (dict): {'name':'category'}
     """
     for n, c in features_known.items():
-        if n in features_dic
+        if n in features_dict.keys():
+            features_dict
