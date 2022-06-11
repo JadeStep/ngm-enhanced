@@ -118,4 +118,6 @@ def set_feature_values(features_dict, features_known):
     """
     for n, c in features_known.items():
         if n in features_dict.keys():
-            features_dict
+            features_dict[n] = c
+        else:
+    
