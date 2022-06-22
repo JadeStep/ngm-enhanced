@@ -125,4 +125,4 @@ def set_feature_values(features_dict, features_known):
 
 
 def series2df(series):
-    "Convert a pd.Series to pd.
+    "Convert a pd.Series to pd.Dataframe and set the
