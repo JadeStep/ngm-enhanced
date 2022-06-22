@@ -120,4 +120,5 @@ def set_feature_values(features_dict, features_known):
         if n in features_dict.keys():
             features_dict[n] = c
         else:
-            print(f'node {n} not found in features_di
+            print(f'node {n} not found in features_dict')
+    return features_dict
