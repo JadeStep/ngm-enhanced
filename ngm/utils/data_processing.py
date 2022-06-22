@@ -122,3 +122,7 @@ def set_feature_values(features_dict, features_known):
         else:
             print(f'node {n} not found in features_dict')
     return features_dict
+
+
+def series2df(series):
+    "
