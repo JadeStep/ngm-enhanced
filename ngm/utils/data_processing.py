@@ -128,3 +128,4 @@ def series2df(series):
     "Convert a pd.Series to pd.Dataframe and set the index as header."
     # Convert the series to dictionary.
     series_dict = {n:v for n, v in zip(series.index, series.values)}
+    # Create the dataframe from 
