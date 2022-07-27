@@ -129,4 +129,5 @@ def series2df(series):
     # Convert the series to dictionary.
     series_dict = {n:v for n, v in zip(series.index, series.values)}
     # Create the dataframe from series and transpose.
-    df = pd.DataFrame(series_dict.items())
+    df = pd.DataFrame(series_dict.items()).transpose()
+    # Set the ind
