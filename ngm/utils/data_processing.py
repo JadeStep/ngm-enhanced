@@ -130,4 +130,4 @@ def series2df(series):
     series_dict = {n:v for n, v in zip(series.index, series.values)}
     # Create the dataframe from series and transpose.
     df = pd.DataFrame(series_dict.items()).transpose()
-    # Set the ind
+    # Set the index row as header and drop i
