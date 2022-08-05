@@ -131,4 +131,5 @@ def series2df(series):
     # Create the dataframe from series and transpose.
     df = pd.DataFrame(series_dict.items()).transpose()
     # Set the index row as header and drop it from values.
-    df.columns
+    df.columns = df.iloc[0]
+    df = df.drop(df.i
