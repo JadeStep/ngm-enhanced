@@ -132,4 +132,8 @@ def series2df(series):
     df = pd.DataFrame(series_dict.items()).transpose()
     # Set the index row as header and drop it from values.
     df.columns = df.iloc[0]
-    df = df.drop(df.i
+    df = df.drop(df.index[0])
+    return df
+
+
+def t2n
