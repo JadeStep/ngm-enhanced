@@ -136,4 +136,5 @@ def series2df(series):
     return df
 
 
-def t2n
+def t2np(x):
+    "Convert torch to nu
