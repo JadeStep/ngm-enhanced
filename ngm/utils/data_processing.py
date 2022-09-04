@@ -137,4 +137,5 @@ def series2df(series):
 
 
 def t2np(x):
-    "Convert torch to nu
+    "Convert torch to numpy"
+    return x.detac
