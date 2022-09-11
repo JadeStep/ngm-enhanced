@@ -138,4 +138,7 @@ def series2df(series):
 
 def t2np(x):
     "Convert torch to numpy"
-    return x.detac
+    return x.detach().cpu().numpy()
+
+
+def convertToTorch(da
