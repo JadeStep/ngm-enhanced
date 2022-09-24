@@ -141,4 +141,4 @@ def t2np(x):
     return x.detach().cpu().numpy()
 
 
-def convertToTorch(da
+def convertToTorch(data, req_grad=False, use_cuda=False
