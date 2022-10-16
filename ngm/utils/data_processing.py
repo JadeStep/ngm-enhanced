@@ -143,4 +143,6 @@ def t2np(x):
 
 def convertToTorch(data, req_grad=False, use_cuda=False):
     """Convert data from numpy to torch variable, if the req_grad
-    flag is on then the gradient calcula
+    flag is on then the gradient calculation is turned on.
+    """
+    i
