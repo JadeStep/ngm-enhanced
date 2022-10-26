@@ -146,4 +146,4 @@ def convertToTorch(data, req_grad=False, use_cuda=False):
     flag is on then the gradient calculation is turned on.
     """
     if not torch.is_tensor(data):
-    
+        dtype = torch.cuda.FloatTensor if 
