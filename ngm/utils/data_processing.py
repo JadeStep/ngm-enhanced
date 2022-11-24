@@ -147,4 +147,5 @@ def convertToTorch(data, req_grad=False, use_cuda=False):
     """
     if not torch.is_tensor(data):
         dtype = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
-        data = torch.from_numpy(data.astype(np.float, copy=False)).type(dt
+        data = torch.from_numpy(data.astype(np.float, copy=False)).type(dtype)
+    data.requir
