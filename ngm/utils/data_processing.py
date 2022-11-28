@@ -153,4 +153,7 @@ def convertToTorch(data, req_grad=False, use_cuda=False):
 
 
 def normalize_table(X, method='min_max'):
-    """Normalize the input data 
+    """Normalize the input data X.
+
+    Args:
+        X (pd.Da
