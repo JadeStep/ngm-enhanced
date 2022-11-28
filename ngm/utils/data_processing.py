@@ -152,4 +152,5 @@ def convertToTorch(data, req_grad=False, use_cuda=False):
     return data
 
 
-def normalize_table(X, method
+def normalize_table(X, method='min_max'):
+    """No
