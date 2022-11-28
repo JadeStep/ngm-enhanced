@@ -156,4 +156,4 @@ def normalize_table(X, method='min_max'):
     """Normalize the input data X.
 
     Args:
-        X (pd.Da
+        X (pd.Dataframe): Samples(M) x Feat
