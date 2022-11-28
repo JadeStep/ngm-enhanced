@@ -160,4 +160,4 @@ def normalize_table(X, method='min_max'):
         methods (str): min_max/mean 
 
     Returns:
-        Xnorm (pd
+        Xnorm (pd.Dataframe): Samples(M) x Features(D
