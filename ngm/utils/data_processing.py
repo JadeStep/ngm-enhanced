@@ -157,4 +157,7 @@ def normalize_table(X, method='min_max'):
 
     Args:
         X (pd.Dataframe): Samples(M) x Features(D).
-        methods (str): min_max/me
+        methods (str): min_max/mean 
+
+    Returns:
+        Xnorm (pd
