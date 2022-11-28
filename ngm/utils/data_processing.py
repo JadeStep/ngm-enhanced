@@ -150,3 +150,6 @@ def convertToTorch(data, req_grad=False, use_cuda=False):
         data = torch.from_numpy(data.astype(np.float, copy=False)).type(dtype)
     data.requires_grad = req_grad
     return data
+
+
+def normalize_table(X, method
