@@ -163,4 +163,5 @@ def normalize_table(X, method='min_max'):
         Xnorm (pd.Dataframe): Samples(M) x Features(D).
         scaler (object): The scaler to scale X
     """
-    if method=='min_max
+    if method=='min_max':
+        scaler = pr
