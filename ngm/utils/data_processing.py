@@ -166,4 +166,6 @@ def normalize_table(X, method='min_max'):
     if method=='min_max':
         scaler = preprocessing.MinMaxScaler()
     elif method=='mean':
-        scaler = preprocessing.Stand
+        scaler = preprocessing.StandardScaler()
+    else:
+        print(f'
