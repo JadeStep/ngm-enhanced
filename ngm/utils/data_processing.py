@@ -165,4 +165,5 @@ def normalize_table(X, method='min_max'):
     """
     if method=='min_max':
         scaler = preprocessing.MinMaxScaler()
-    elif me
+    elif method=='mean':
+        sca
