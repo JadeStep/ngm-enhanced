@@ -170,4 +170,5 @@ def normalize_table(X, method='min_max'):
     else:
         print(f'Scaler "{method}" not found')
     # Apply the scaler on the data X
-    Xnorm = scaler.fi
+    Xnorm = scaler.fit_transform(X)
+    # Convert
