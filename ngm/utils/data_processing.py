@@ -169,4 +169,5 @@ def normalize_table(X, method='min_max'):
         scaler = preprocessing.StandardScaler()
     else:
         print(f'Scaler "{method}" not found')
-    # Apply the scaler o
+    # Apply the scaler on the data X
+    Xnorm = scaler.fi
