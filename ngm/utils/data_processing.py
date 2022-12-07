@@ -172,4 +172,4 @@ def normalize_table(X, method='min_max'):
     # Apply the scaler on the data X
     Xnorm = scaler.fit_transform(X)
     # Convert back to pandas dataframe
-    Xnorm = 
+    Xnorm = pd.DataFrame(Xnorm, col
