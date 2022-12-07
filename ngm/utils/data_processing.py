@@ -171,4 +171,5 @@ def normalize_table(X, method='min_max'):
         print(f'Scaler "{method}" not found')
     # Apply the scaler on the data X
     Xnorm = scaler.fit_transform(X)
-    # Convert
+    # Convert back to pandas dataframe
+    Xnorm = 
