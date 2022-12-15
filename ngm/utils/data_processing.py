@@ -173,4 +173,7 @@ def normalize_table(X, method='min_max'):
     Xnorm = scaler.fit_transform(X)
     # Convert back to pandas dataframe
     Xnorm = pd.DataFrame(Xnorm, columns=X.columns)
-    r
+    return Xnorm, scaler
+
+
+def inverse_norm
