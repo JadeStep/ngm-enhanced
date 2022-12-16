@@ -177,4 +177,5 @@ def normalize_table(X, method='min_max'):
 
 
 def inverse_norm_table(Xnorm, Xscaler):
-    "
+    """
+    Apply the inverse transfor
