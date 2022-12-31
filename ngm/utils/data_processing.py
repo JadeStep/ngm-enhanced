@@ -179,4 +179,6 @@ def normalize_table(X, method='min_max'):
 def inverse_norm_table(Xnorm, Xscaler):
     """
     Apply the inverse transform on input normalized
-    data to get back the or
+    data to get back the original data.
+    """
+    return
