@@ -183,4 +183,4 @@ def inverse_norm_table(Xnorm, Xscaler):
     """
     return Xscaler.inverse_transform(Xnorm)
 
-def analyse_condition_
+def analyse_condition_number(table, MESSAG
