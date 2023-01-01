@@ -181,4 +181,6 @@ def inverse_norm_table(Xnorm, Xscaler):
     Apply the inverse transform on input normalized
     data to get back the original data.
     """
-    return Xscaler.inverse_transform(Xnor
+    return Xscaler.inverse_transform(Xnorm)
+
+def analyse_condition_
