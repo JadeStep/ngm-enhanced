@@ -183,4 +183,5 @@ def inverse_norm_table(Xnorm, Xscaler):
     """
     return Xscaler.inverse_transform(Xnorm)
 
-def analyse_condition_number(table, MESSAG
+def analyse_condition_number(table, MESSAGE=''):
+    S = covarianc
