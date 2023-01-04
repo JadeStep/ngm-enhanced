@@ -184,4 +184,5 @@ def inverse_norm_table(Xnorm, Xscaler):
     return Xscaler.inverse_transform(Xnorm)
 
 def analyse_condition_number(table, MESSAGE=''):
-    S = covariance.empirical_covariance(table,
+    S = covariance.empirical_covariance(table, assume_centered=False)
+  
