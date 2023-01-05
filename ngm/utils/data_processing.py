@@ -185,4 +185,4 @@ def inverse_norm_table(Xnorm, Xscaler):
 
 def analyse_condition_number(table, MESSAGE=''):
     S = covariance.empirical_covariance(table, assume_centered=False)
-  
+    eig, con = eig_v
