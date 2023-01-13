@@ -188,4 +188,6 @@ def analyse_condition_number(table, MESSAGE=''):
     eig, con = eig_val_condition_num(S)
     print(f'{MESSAGE} covariance matrix: The condition number {con} and min eig {min(eig)} max eig {max(eig)}')
     return S, eig, con
- 
+     
+
+def eig_val_conditio
