@@ -190,4 +190,5 @@ def analyse_condition_number(table, MESSAGE=''):
     return S, eig, con
      
 
-def eig_val_conditio
+def eig_val_condition_num(A):
+    """Calculates the e
