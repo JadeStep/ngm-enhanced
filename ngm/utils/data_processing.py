@@ -186,4 +186,5 @@ def inverse_norm_table(Xnorm, Xscaler):
 def analyse_condition_number(table, MESSAGE=''):
     S = covariance.empirical_covariance(table, assume_centered=False)
     eig, con = eig_val_condition_num(S)
-    print(f'{MESSAGE} covariance matrix: The condition number {con} and min eig {min(
+    print(f'{MESSAGE} covariance matrix: The condition number {con} and min eig {min(eig)} max eig {max(eig)}')
+   
