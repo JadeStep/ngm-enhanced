@@ -191,4 +191,4 @@ def analyse_condition_number(table, MESSAGE=''):
      
 
 def eig_val_condition_num(A):
-    """Calculates the e
+    """Calculates the eigenvalues and the con
