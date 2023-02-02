@@ -194,4 +194,4 @@ def eig_val_condition_num(A):
     """Calculates the eigenvalues and the condition 
     number of the input matrix A
 
-  
+    condition number = m
