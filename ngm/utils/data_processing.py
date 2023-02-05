@@ -196,4 +196,5 @@ def eig_val_condition_num(A):
 
     condition number = max(|eig|)/min(|eig|)
     """
-    eig = [v.real for v in np.linalg.ei
+    eig = [v.real for v in np.linalg.eigvals(A)]
+    condition_number
