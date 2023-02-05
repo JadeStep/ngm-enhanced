@@ -198,4 +198,7 @@ def eig_val_condition_num(A):
     """
     eig = [v.real for v in np.linalg.eigvals(A)]
     condition_number = max(np.abs(eig)) / min(np.abs(eig))
-    return e
+    return eig, condition_number
+
+
+# Proces
