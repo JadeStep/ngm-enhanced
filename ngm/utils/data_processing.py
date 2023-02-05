@@ -201,4 +201,4 @@ def eig_val_condition_num(A):
     return eig, condition_number
 
 
-# Processing the input data to 
+# Processing the input data to be compatiable for the CI gra
