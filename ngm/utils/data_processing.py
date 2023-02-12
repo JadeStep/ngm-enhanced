@@ -204,4 +204,5 @@ def eig_val_condition_num(A):
 # Processing the input data to be compatiable for the CI graph recovery models
 def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True):
     """Processing the input data to be compatiable for the 
-    regression network model. Checks for the 
+    regression network model. Checks for the following
+    issues in the inp
