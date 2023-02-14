@@ -208,4 +208,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     issues in the input tabular data (real values only).
     
     1. Remove all the rows with zero entries
-    2
+    2. Fill Nans with column m
