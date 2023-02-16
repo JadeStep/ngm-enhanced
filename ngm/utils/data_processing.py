@@ -210,4 +210,6 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     1. Remove all the rows with zero entries
     2. Fill Nans with column mean
     3. Remove columns containing only a single entry
-    4. Remove columns with duplic
+    4. Remove columns with duplicate values
+    
+    Args:
