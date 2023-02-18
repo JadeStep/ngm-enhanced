@@ -213,4 +213,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     4. Remove columns with duplicate values
     
     Args:
-        X (pd.DataFrame): The i
+        X (pd.DataFrame): The input table with
