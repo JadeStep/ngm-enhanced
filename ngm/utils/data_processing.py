@@ -217,4 +217,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
         NORM (str): min_max/mean
 
     Returns:
-        table (pd.Dat
+        table (pd.DataFrame): The processed table
