@@ -220,4 +220,5 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
         table (pd.DataFrame): The processed table with headers
     """
     start = time()
-    print(f'{msg}: Processing the input table for basic compatibility 
+    print(f'{msg}: Processing the input table for basic compatibility check')
+    print(f'{msg}:
