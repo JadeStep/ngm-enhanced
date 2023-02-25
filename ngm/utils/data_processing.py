@@ -219,4 +219,5 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     Returns:
         table (pd.DataFrame): The processed table with headers
     """
-    start =
+    start = time()
+    print(f'{msg}: Proces
