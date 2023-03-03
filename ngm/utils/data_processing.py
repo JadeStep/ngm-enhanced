@@ -223,4 +223,6 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     print(f'{msg}: Processing the input table for basic compatibility check')
     print(f'{msg}: The input table has sample {table.shape[0]} and features {table.shape[1]}')
     
-    total_samples = tab
+    total_samples = table.shape[0]
+
+    # typecast 
