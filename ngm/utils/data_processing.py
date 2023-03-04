@@ -229,4 +229,5 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     table = table._convert(numeric=True)
 
     # 1. Removing all the rows with zero entries as the samples are missing
-    table = table.loc[~(table==0).all(axis=1
+    table = table.loc[~(table==0).all(axis=1)]
+    print(f'{msg}: Total zero samp
