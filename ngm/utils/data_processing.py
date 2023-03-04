@@ -225,4 +225,5 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     
     total_samples = table.shape[0]
 
-    # typecast 
+    # typecast the table to floats
+ 
