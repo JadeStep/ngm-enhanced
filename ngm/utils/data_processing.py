@@ -228,3 +228,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     # typecast the table to floats
     table = table._convert(numeric=True)
 
+    # 1. Removing all the rows with
