@@ -232,4 +232,5 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     table = table.loc[~(table==0).all(axis=1)]
     print(f'{msg}: Total zero samples dropped {total_samples - table.shape[0]}')
 
-    # 2. Fill nan's with mea
+    # 2. Fill nan's with mean of columns
+    table = table.f
