@@ -235,4 +235,5 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     # 2. Fill nan's with mean of columns
     table = table.fillna(table.mean())
 
-    # 3. Remove columns con
+    # 3. Remove columns containing only a single value
+    singl
