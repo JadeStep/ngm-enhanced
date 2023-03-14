@@ -237,4 +237,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
 
     # 3. Remove columns containing only a single value
     single_value_columns = []
-  
+    for col in table.columns:
