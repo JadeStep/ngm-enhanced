@@ -239,4 +239,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     single_value_columns = []
     for col in table.columns:
         if len(table[col].unique()) == 1:
-            si
+            single_value_columns.append(c
