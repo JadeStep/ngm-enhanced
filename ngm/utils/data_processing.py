@@ -244,4 +244,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     print(f'{msg}: Single value columns dropped: total {len(single_value_columns)}, columns {single_value_columns}')
 
     # Normalization of the input table
-    tab
+    table, scaler = normalize_table(table
