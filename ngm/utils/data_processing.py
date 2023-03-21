@@ -247,4 +247,5 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     table, scaler = normalize_table(table, NORM)
 
     if drop_duplicate:
-        # 4. Remove
+        # 4. Remove columns with duplicate values
+   
