@@ -248,4 +248,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
 
     if drop_duplicate:
         # 4. Remove columns with duplicate values
-   
+        all_columns = table.c
