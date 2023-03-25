@@ -250,4 +250,5 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
         # 4. Remove columns with duplicate values
         all_columns = table.columns
         table = table.T.drop_duplicates().T  
-        duplicate_columns = list(set(all_columns) 
+        duplicate_columns = list(set(all_columns) - set(table.columns))
+       
