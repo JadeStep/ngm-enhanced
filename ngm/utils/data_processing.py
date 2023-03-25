@@ -253,4 +253,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
         duplicate_columns = list(set(all_columns) - set(table.columns))
         print(f'{msg}: Duplicates dropped: total {len(duplicate_columns)}, columns {duplicate_columns}')
 
-    # # Analysing
+    # # Analysing the processed table's 
