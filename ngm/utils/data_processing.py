@@ -254,4 +254,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
         print(f'{msg}: Duplicates dropped: total {len(duplicate_columns)}, columns {duplicate_columns}')
 
     # # Analysing the processed table's covariance matrix condition number
-    # cov_table, eig, c
+    # cov_table, eig, con = analyse_condition_number(tab
