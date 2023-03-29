@@ -258,4 +258,8 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
 
     print(f'{msg}: The processed table has sample {table.shape[0]} and features {table.shape[1]}')
     print(f'{msg}: Total time to process the table {np.round(time()-start, 3)} secs')
-    return table, s
+    return table, scaler
+
+
+def get_cat_names(ohe, dtype):
+   
