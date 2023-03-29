@@ -256,4 +256,4 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
     # # Analysing the processed table's covariance matrix condition number
     # cov_table, eig, con = analyse_condition_number(table, 'Processed')
 
-    print(f'{msg}: The processed tab
+    print(f'{msg}: The processed table has sample {table.shap
