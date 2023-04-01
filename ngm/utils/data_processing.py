@@ -263,4 +263,5 @@ def process_data_for_CI_graph(table, NORM='min_max', msg='', drop_duplicate=True
 
 def get_cat_names(ohe, dtype):
     # Collecting the number of categories in cat features
-    # categorical features in the 
+    # categorical features in the original df. 
+    categorical_f
