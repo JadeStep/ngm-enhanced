@@ -266,4 +266,5 @@ def get_cat_names(ohe, dtype):
     # categorical features in the original df. 
     categorical_features = [k for k, v in dtype.items() if v=='c']
     cat_names = {}
-    for name, cat in zip(categorical_features
+    for name, cat in zip(categorical_features, ohe.categories_):
+        c
