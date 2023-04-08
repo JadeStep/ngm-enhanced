@@ -270,4 +270,5 @@ def get_cat_names(ohe, dtype):
         cat_names[name] = [str(name)+'_'+str(c) for c in cat]
     return cat_names
 
-def convert_to_onehot
+def convert_to_onehot(df, prefix=None):
+    ohe = 
