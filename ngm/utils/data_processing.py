@@ -271,4 +271,5 @@ def get_cat_names(ohe, dtype):
     return cat_names
 
 def convert_to_onehot(df, prefix=None):
-    ohe = preprocessing.OneHotEncoder()#(handle_unknown='
+    ohe = preprocessing.OneHotEncoder()#(handle_unknown='ignore')
+    ohe.fit(df)
