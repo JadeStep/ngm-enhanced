@@ -277,4 +277,5 @@ def convert_to_onehot(df, prefix=None):
     df_ohe = ohe.transform(df).toarray()
     # transforming a single input
     # single_ohe = ohe.transform([df.loc[0].values]).toarrayray()
-    # se
+    # setting the column names
+    
