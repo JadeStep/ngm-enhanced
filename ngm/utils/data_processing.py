@@ -281,3 +281,6 @@ def convert_to_onehot(df, prefix=None):
     col_names = ohe.get_feature_names_out()
     df_ohe = pd.DataFrame(df_ohe, columns=col_names)
 
+    return df_ohe, ohe
+
+
