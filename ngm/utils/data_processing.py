@@ -274,4 +274,5 @@ def convert_to_onehot(df, prefix=None):
     ohe = preprocessing.OneHotEncoder()#(handle_unknown='ignore')
     ohe.fit(df)
     # transforming the entire array
-    df_ohe = ohe.transf
+    df_ohe = ohe.transform(df).toarray()
+    # trans
