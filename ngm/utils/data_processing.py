@@ -278,4 +278,5 @@ def convert_to_onehot(df, prefix=None):
     # transforming a single input
     # single_ohe = ohe.transform([df.loc[0].values]).toarrayray()
     # setting the column names
-    col_names = ohe.get_
+    col_names = ohe.get_feature_names_out()
+    df_ohe = pd
