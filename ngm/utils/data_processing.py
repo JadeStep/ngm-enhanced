@@ -275,4 +275,5 @@ def convert_to_onehot(df, prefix=None):
     ohe.fit(df)
     # transforming the entire array
     df_ohe = ohe.transform(df).toarray()
-    # trans
+    # transforming a single input
+    # s
