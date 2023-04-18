@@ -286,4 +286,4 @@ def convert_to_onehot(df, prefix=None):
 
 # Graph processing tools
 
-def plot_graph_compare(G, pos=None, title='', 
+def plot_graph_compare(G, pos=None, title='', scale_wt=1, intens
