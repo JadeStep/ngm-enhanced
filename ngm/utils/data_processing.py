@@ -287,4 +287,4 @@ def convert_to_onehot(df, prefix=None):
 # Graph processing tools
 
 def plot_graph_compare(G, pos=None, title='', scale_wt=1, intensity=1):
-    edge_colors = [G.edges
+    edge_colors = [G.edges[e]['color'] for e in 
