@@ -291,4 +291,5 @@ def plot_graph_compare(G, pos=None, title='', scale_wt=1, intensity=1):
     edge_width = [intensity*abs(float(G.edges[e]['weight']))/scale_wt for e in G.edges]    
     plt.title(title, fontsize=20)
     n_edges = len(G.edges)
-   
+    if pos is None:
+        pos
