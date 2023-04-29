@@ -292,4 +292,5 @@ def plot_graph_compare(G, pos=None, title='', scale_wt=1, intensity=1):
     plt.title(title, fontsize=20)
     n_edges = len(G.edges)
     if pos is None:
-        pos = nx.spring_layout(G, scale=0.2, k=1/np.sqrt(n_ed
+        pos = nx.spring_layout(G, scale=0.2, k=1/np.sqrt(n_edges+10))
+        # pos = nx.
