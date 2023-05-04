@@ -294,4 +294,5 @@ def plot_graph_compare(G, pos=None, title='', scale_wt=1, intensity=1):
     if pos is None:
         pos = nx.spring_layout(G, scale=0.2, k=1/np.sqrt(n_edges+10))
         # pos = nx.nx_agraph.graphviz_layout(G, prog='fdp') #'fdp', 'sfdp', 'neato'
-    nx.draw_networkx_nodes(G, pos, node_color='gr
+    nx.draw_networkx_nodes(G, pos, node_color='grey', node_size=100)
+   
