@@ -297,4 +297,4 @@ def plot_graph_compare(G, pos=None, title='', scale_wt=1, intensity=1):
     nx.draw_networkx_nodes(G, pos, node_color='grey', node_size=100)
     nx.draw_networkx_edges(G, pos, edge_color=edge_colors, width=edge_width)
     y_off = 0.008
-    nx.draw_network
+    nx.draw_networkx_labels(G, pos = {k:([v
