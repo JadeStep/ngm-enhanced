@@ -300,4 +300,4 @@ def plot_graph_compare(G, pos=None, title='', scale_wt=1, intensity=1):
     nx.draw_networkx_labels(G, pos = {k:([v[0], v[1]+y_off]) for k,v in pos.items()})
     return 
 
-def compare_graphs(G1, G2, t1='Titl
+def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_ty
