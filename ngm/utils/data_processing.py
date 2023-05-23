@@ -306,4 +306,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     2. Finding the unique edges in graphs (edges in G1 and not in G2 and vice-versa)
     """
     # Find the common nodes between the graphs
-    c
+    common_nodes = set(G1.nodes
