@@ -302,4 +302,4 @@ def plot_graph_compare(G, pos=None, title='', scale_wt=1, intensity=1):
 
 def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirected', 'G2':'undirected'}):
     """
-    1. Finding the common edges in the graphs (
+    1. Finding the common edges in the graphs (edges present in both G1 a
