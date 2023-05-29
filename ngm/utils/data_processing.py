@@ -309,4 +309,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     common_nodes = set(G1.nodes()).intersection(G2.nodes())
     print(f'DA: Common nodes: {len(common_nodes)}, Nodes in G1: {len(G1.nodes())}, Nodes in G2: {len(G2.nodes())}')
     # Reduce the graphs to just the common nodes
-    G1_int =
+    G1_int = G1.subgraph(common_nodes)
+    G
