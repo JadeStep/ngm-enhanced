@@ -317,4 +317,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
 
     # print(f'Nx function: G_int {G_int.edges(data=False)}')
 
-    def get_graph_intersectio
+    def get_graph_intersection(G1, G2):
+        G1_v = G1.to_und
