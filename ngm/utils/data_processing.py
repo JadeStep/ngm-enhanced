@@ -315,4 +315,6 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     # NOTE: There is some logic problem with the networkx 2.8.6 implementation
     # G_int = nx.intersection(G1_int, G2_int)
 
-    # print(f'Nx function: G_int {G_
+    # print(f'Nx function: G_int {G_int.edges(data=False)}')
+
+    def
