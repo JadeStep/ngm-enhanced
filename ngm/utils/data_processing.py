@@ -319,4 +319,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
 
     def get_graph_intersection(G1, G2):
         G1_v = G1.to_undirected(G1)
-        G2_v
+        G2_v = G2.to_undirected(G2)
