@@ -321,4 +321,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
         G1_v = G1.to_undirected(G1)
         G2_v = G2.to_undirected(G2)
         common_edges = []
-     
+        for edge in G1_v.edges(data
