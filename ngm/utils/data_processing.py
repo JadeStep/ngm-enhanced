@@ -325,4 +325,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
             if G2_v.has_edge(*edge):
                 common_edges.append(edge)
         G_int = nx.Graph()
-        G_int.add_e
+        G_int.add_edges_from(common_edges)
+  
