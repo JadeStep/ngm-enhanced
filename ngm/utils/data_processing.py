@@ -326,4 +326,6 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
                 common_edges.append(edge)
         G_int = nx.Graph()
         G_int.add_edges_from(common_edges)
-  
+        return G_int
+
+    G_int = ge
