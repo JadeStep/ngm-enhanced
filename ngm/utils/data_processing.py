@@ -328,4 +328,7 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
         G_int.add_edges_from(common_edges)
         return G_int
 
-    G_int = get_graph_intersection(G1
+    G_int = get_graph_intersection(G1_int, G2_int)
+
+
+    #
