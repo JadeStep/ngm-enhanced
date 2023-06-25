@@ -332,4 +332,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
 
 
     # print(f'G1_int {G1_int.edges(data=False)}')
-    # print(f'G2_int {G2_int.edges(data=
+    # print(f'G2_int {G2_int.edges(data=False)}')
+    # print(f'My fun
