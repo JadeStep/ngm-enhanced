@@ -338,4 +338,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     
     # remove isolated nodes with no edge connections
     isolated_nodes = list(nx.isolates(G_int))
-    print(f'isolated 
+    print(f'isolated nodes {isolated_nodes}')
+    G_int.r
