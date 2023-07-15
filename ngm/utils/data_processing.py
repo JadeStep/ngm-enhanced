@@ -341,4 +341,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     print(f'isolated nodes {isolated_nodes}')
     G_int.remove_nodes_from(isolated_nodes)
     # unfreeze the graphs
-    G1_int = nx.Graph(G1_int) if graph_type['G1']=='undirected'
+    G1_int = nx.Graph(G1_int) if graph_type['G1']=='undirected' else nx.DiGraph(G1_int)
+    
