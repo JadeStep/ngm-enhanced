@@ -346,4 +346,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     # Remove isolated nodes from the G1 and G2 subgraphs
     G1_int.remove_nodes_from(isolated_nodes)
     G2_int.remove_nodes_from(isolated_nodes)
-    # freeze the graph
+    # freeze the graphs
+    G1_int = nx.freeze(G1_
