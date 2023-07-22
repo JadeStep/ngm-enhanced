@@ -350,4 +350,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     G1_int = nx.freeze(G1_int)
     G2_int = nx.freeze(G2_int)
 
-    # Find the common set of edges
+    # Find the common set of edges 
+    common_edges = G_
