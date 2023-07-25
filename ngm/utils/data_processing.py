@@ -357,4 +357,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     # 2. Unique edges present in G1
     if graph_type['G1']=='undirected':
         G1_int = nx.Graph(((u, v, e) for u,v,e in G1_int.edges(data=True) if G_int.has_edge(u, v)))
-    
+        G1_unique = nx.G
