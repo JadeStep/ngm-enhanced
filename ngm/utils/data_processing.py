@@ -354,4 +354,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     common_edges = G_int.edges()
     print(f'common_edges{common_edges}')
     # 1. Updating the G1 and G2 graphs with only the common edges
-    # 
+    # 2. Unique edges present
