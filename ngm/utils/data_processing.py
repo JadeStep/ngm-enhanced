@@ -365,4 +365,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
         G1_unique = nx.DiGraph(((u, v, e) for u,v,e in G1.edges(data=True) if not G_int.has_edge(u, v)))
 
     if graph_type['G2']=='undirected':
-        G2_int = nx.Graph(((u, v, e) for u,v,e in G2_int.edges(data=True) if G_in
+        G2_int = nx.Graph(((u, v, e) for u,v,e in G2_int.edges(data=True) if G_int.has_edge(u, v)))
+        G2_
