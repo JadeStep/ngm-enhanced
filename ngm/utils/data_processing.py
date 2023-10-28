@@ -372,4 +372,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
         G2_unique = nx.DiGraph(((u, v, e) for u,v,e in G2.edges(data=True) if not G_int.has_edge(u, v)))
 
     # if pos is None:
-    pos = nx.spring_layout(G_int, scale=40, k=3/np.sqrt(G
+    pos = nx.spring_layout(G_int, scale=40, k=3/np.sqrt(G_int.order()))
+    # pos = nx.nx_a
