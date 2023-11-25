@@ -373,4 +373,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
 
     # if pos is None:
     pos = nx.spring_layout(G_int, scale=40, k=3/np.sqrt(G_int.order()))
-    # pos = nx.nx_agraph.graphviz_layout(G_int, prog='
+    # pos = nx.nx_agraph.graphviz_layout(G_int, prog='neato') #'fdp', 'sfdp', 'nea
