@@ -378,4 +378,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     # fig = plt.figure(figsize=(fig_size, fig_size))
 
 
-    def get_s
+    def get_scaling_wt(G):
+        edge_
