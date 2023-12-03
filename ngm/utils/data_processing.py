@@ -379,4 +379,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
 
 
     def get_scaling_wt(G):
-        edge_
+        edge_width_G = np.array([a
