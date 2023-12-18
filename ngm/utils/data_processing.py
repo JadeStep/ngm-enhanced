@@ -384,4 +384,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
         scale_wt_G = np.max(np.abs(edge_width_G)) if len(edge_width_G) > 0 else 1
         return scale_wt_G
 
-   
+    scale_wt_G1 = get_scaling_wt
