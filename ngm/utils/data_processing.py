@@ -390,4 +390,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     plt.figure(figsize=(24, 24)) 
     plt.subplot(221)
     # plt.figure(1, figsize=(fig_size, fig_size))
-    plot_gr
+    plot_graph_compare(G1_int, pos, t
