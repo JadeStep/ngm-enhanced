@@ -394,4 +394,4 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     plt.subplot(222)#, figsize=(fig_size, fig_size))
     plot_graph_compare(G2_int, pos, title=t2+': Edges present in both graphs', scale_wt=scale_wt_G2)
     plt.subplot(223)#, figsize=(fig_size, fig_size))
-    plot_graph_compare(G1_unique, title=t1+': Unique edges',
+    plot_graph_compare(G1_unique, title=t1+': Unique edges', scale_wt=scale_wt_G
