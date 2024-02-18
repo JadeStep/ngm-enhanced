@@ -397,4 +397,6 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     plot_graph_compare(G1_unique, title=t1+': Unique edges', scale_wt=scale_wt_G1, intensity=3)
     plt.subplot(224)#, figsize=(fig_size, fig_size))
     # G2_unique.remove_nodes_from(['no_mmorb', 'attend'])
-    plot_graph_compare(G2_unique, title=t2+': Unique edges', scale_wt=scale_wt_G2)#, 
+    plot_graph_compare(G2_unique, title=t2+': Unique edges', scale_wt=scale_wt_G2)#, get_image_bytes=True)
+
+    p
