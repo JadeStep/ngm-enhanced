@@ -399,4 +399,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     # G2_unique.remove_nodes_from(['no_mmorb', 'attend'])
     plot_graph_compare(G2_unique, title=t2+': Unique edges', scale_wt=scale_wt_G2)#, get_image_bytes=True)
 
-    plt.savefig('compare_graphs', bbox_i
+    plt.savefig('compare_graphs', bbox_inches='tight')
+    # Savi
