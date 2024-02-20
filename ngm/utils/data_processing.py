@@ -402,4 +402,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     plt.savefig('compare_graphs', bbox_inches='tight')
     # Saving the figure in-memory
     buf = io.BytesIO()
-   
+    plt.savefig(buf)
+    
