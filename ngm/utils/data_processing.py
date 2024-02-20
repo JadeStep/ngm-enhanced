@@ -403,4 +403,6 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     # Saving the figure in-memory
     buf = io.BytesIO()
     plt.savefig(buf)
-    # getting the image in byt
+    # getting the image in bytes
+    buf.seek(0)
+    image_
