@@ -408,4 +408,5 @@ def compare_graphs(G1, G2, t1='Title1', t2='Title2', graph_type={'G1':'undirecte
     image_bytes = buf.getvalue() # Image.open(buf, mode='r')
     buf.close()
     # closing the plt
-    plt.clos
+    plt.close()
+    return image_by
